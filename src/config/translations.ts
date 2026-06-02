@@ -95,7 +95,6 @@ export interface Translations {
     ctaTitle: string;
     ctaDesc: string;
     quickLinks: string;
-    copyright: string;
     developedBy: string;
     privacy: string;
     terms: string;
@@ -270,7 +269,6 @@ export const translations: Record<"es" | "en", Translations> = {
       ctaTitle: "¿Listo para optimizar sus sistemas?",
       ctaDesc: "Agende hoy una inspección técnica o solicite una cotización de repuestos.",
       quickLinks: "Enlaces Rápidos",
-      copyright: "Todos los derechos reservados.",
       developedBy: "Desarrollado y mantenido por",
       privacy: "Política de Privacidad",
       terms: "Términos de Servicio",
@@ -457,7 +455,6 @@ export const translations: Record<"es" | "en", Translations> = {
       ctaTitle: "Ready to optimize your systems?",
       ctaDesc: "Schedule a technical inspection or request a spare parts quote today.",
       quickLinks: "Quick Links",
-      copyright: "All rights reserved.",
       developedBy: "Developed and maintained by",
       privacy: "Privacy Policy",
       terms: "Terms of Service",

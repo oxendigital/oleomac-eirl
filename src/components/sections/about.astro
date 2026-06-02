@@ -1,0 +1,99 @@
+---
+import { businessInfo } from "../../config/business-info";
+import { translations } from "../../config/translations";
+
+const locale = (Astro.currentLocale === "en" ? "en" : "es") as "es" | "en";
+const t = translations[locale].about;
+const certifications = businessInfo.certifications ?? [];
+
+const visionTitleParts = t.visionTitle.split(' ');
+const visionFirst = visionTitleParts[0];
+const visionRest = visionTitleParts.slice(1).join(' ');
+
+const missionTitleParts = t.missionTitle.split(' ');
+const missionFirst = missionTitleParts[0];
+const missionRest = missionTitleParts.slice(1).join(' ');
+---
+
+<!-- About Us Section -->
+<section id="about" class="py-20 bg-background transition-colors duration-300">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start border-b border-border/60 pb-16">
+      <!-- Left tag -->
+      <div class="lg:col-span-3 reveal-left">
+        <span class="font-mono text-xs uppercase tracking-widest text-muted-foreground block">{t.label}</span>
+      </div>
+
+      <!-- Right content -->
+      <div class="lg:col-span-9 space-y-10 reveal">
+        <div class="space-y-6">
+          <h2 class="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-foreground leading-tight">
+            {t.title}
+          </h2>
+          <p class="text-lg text-muted-foreground max-w-3xl leading-relaxed">
+            {t.desc}
+          </p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-6 border-t border-border max-w-xl">
+          <div class="space-y-1">
+            <span class="text-4xl md:text-5xl font-heading text-foreground tracking-wide block">{t.stat1Num}</span>
+            <p class="text-xs uppercase tracking-widest text-muted-foreground font-semibold">{t.stat1Desc}</p>
+          </div>
+          <div class="space-y-1">
+            <span class="text-4xl md:text-5xl font-heading text-foreground tracking-wide block">{t.stat2Num}</span>
+            <p class="text-xs uppercase tracking-widest text-muted-foreground font-semibold">{t.stat2Desc}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Certifications strip -->
+    {certifications.length > 0 && (
+      <div class="flex flex-wrap items-center gap-3 pt-10 reveal">
+        {certifications.map(cert => (
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded border border-border bg-muted text-xs font-mono text-muted-foreground">
+            <svg class="w-3 h-3 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            <span>{cert.name}{cert.issuer && ` · ${cert.issuer}`}</span>
+          </div>
+        ))}
+      </div>
+    )}
+
+    <!-- Vision & Mission Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 pt-16">
+      <!-- Vision -->
+      <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 sm:gap-6 items-start reveal delay-100">
+        <div class="sm:col-span-5">
+          <h3 class="text-3xl sm:text-4xl font-heading font-extrabold text-foreground uppercase leading-none tracking-wide">
+              {visionFirst} <br> {visionRest && <span class="text-primary font-light">{visionRest}</span>}
+          </h3>
+        </div>
+        <div class="sm:col-span-7 space-y-3">
+          <h4 class="text-lg font-bold text-foreground">{t.visionHeading}</h4>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            {t.visionDesc}
+          </p>
+        </div>
+      </div>
+
+      <!-- Mission -->
+      <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 sm:gap-6 items-start reveal delay-200">
+        <div class="sm:col-span-5">
+          <h3 class="text-3xl sm:text-4xl font-heading font-extrabold text-foreground uppercase leading-none tracking-wide">
+            {missionFirst} <br> {missionRest && <span class="text-primary font-light">{missionRest}</span>}
+          </h3>
+        </div>
+        <div class="sm:col-span-7 space-y-3">
+          <h4 class="text-lg font-bold text-foreground">{t.missionHeading}</h4>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            {t.missionDesc}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

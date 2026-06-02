@@ -1,0 +1,320 @@
+---
+import { Image } from "astro:assets";
+import galleryTruck from "../../assets/gallery-truck.png";
+import galleryWarehouse from "../../assets/gallery-warehouse.png";
+import galleryDelivery from "../../assets/gallery-delivery.png";
+import heroCargo from "../../assets/hero-cargo.png";
+import servicesDock from "../../assets/services-dock.png";
+import ctaLoading from "../../assets/cta-loading.png";
+import { translations } from "../../config/translations";
+
+const locale = (Astro.currentLocale === "en" ? "en" : "es") as "es" | "en";
+const t = translations[locale].gallery;
+
+import { businessInfo } from "../../config/business-info";
+
+const hasCustomGallery = businessInfo.gallery && businessInfo.gallery.length > 0;
+
+const normalizedSlides = hasCustomGallery
+  ? businessInfo.gallery!.map((item) => ({
+      img: item.url,
+      title: item.title,
+      desc: item.description,
+      isAsset: false
+    }))
+  : [
+      { img: galleryTruck, title: t.slides[0]?.title || "", desc: t.slides[0]?.desc || "", isAsset: true },
+      { img: galleryWarehouse, title: t.slides[1]?.title || "", desc: t.slides[1]?.desc || "", isAsset: true },
+      { img: galleryDelivery, title: t.slides[2]?.title || "", desc: t.slides[2]?.desc || "", isAsset: true },
+      { img: heroCargo, title: t.slides[3]?.title || "", desc: t.slides[3]?.desc || "", isAsset: true },
+      { img: servicesDock, title: t.slides[4]?.title || "", desc: t.slides[4]?.desc || "", isAsset: true },
+      { img: ctaLoading, title: t.slides[5]?.title || "", desc: t.slides[5]?.desc || "", isAsset: true }
+    ];
+---
+
+<!-- Gallery Section -->
+<section id="gallery" class="py-20 bg-muted transition-colors duration-300 overflow-hidden reveal">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between mb-12">
+      <span class="font-mono text-xs uppercase tracking-widest text-muted-foreground block">{t.label}</span>
+      <!-- Pager and navigation indicators -->
+      <div class="flex items-center gap-4">
+        <span id="gallery-pager" class="font-mono text-xs text-muted-foreground tracking-widest">( 01 / 06 )</span>
+        <div class="flex items-center gap-2">
+          <button id="gallery-prev" class="h-8 w-8 rounded border border-border flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button id="gallery-next" class="h-8 w-8 rounded bg-foreground flex items-center justify-center text-background hover:bg-foreground/90 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Image gallery slider wrapper -->
+    <div class="relative overflow-hidden w-full select-none cursor-grab active:cursor-grabbing" id="gallery-slider-container">
+      <div class="flex transition-transform duration-500 ease-out gap-6" id="gallery-track">
+        {normalizedSlides.map((slide, idx) => {
+          return (
+            <div class="w-[85vw] sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] shrink-0 group cursor-pointer gallery-slide" data-slide-index={idx}>
+              <div class="rounded-2xl overflow-hidden border border-border/50 bg-card shadow-sm relative h-80">
+                {slide.isAsset ? (
+                  <Image
+                    src={slide.img as any}
+                    alt={slide.title.replace('// ', '')}
+                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
+                  />
+                ) : (
+                  <img
+                    src={slide.img as string}
+                    alt={slide.title.replace('// ', '')}
+                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
+                    loading="lazy"
+                  />
+                )}
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 font-semibold">
+                  <span class="text-white text-xs font-mono uppercase tracking-widest">{slide.title}</span>
+                  <span class="text-[10px] text-zinc-300 font-sans mt-1">{slide.desc}</span>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox Modal -->
+<div id="lightbox" class="fixed inset-0 bg-black/95 z-[100] hidden items-center justify-center transition-all duration-300 opacity-0 backdrop-blur-md">
+  <button id="lightbox-close" class="absolute top-6 right-6 text-white/70 hover:text-white hover:scale-110 transition-all text-xs font-mono tracking-widest flex items-center gap-2 cursor-pointer z-[110] bg-transparent border-0 outline-none">
+    <span>[ CLOSE ]</span>
+    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </button>
+  <button id="lightbox-prev" class="absolute left-6 h-12 w-12 rounded-full border border-white/20 hover:border-white/80 flex items-center justify-center text-white/70 hover:text-white transition-all cursor-pointer z-[110] bg-zinc-900/30 backdrop-blur-sm">
+    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+    </svg>
+  </button>
+  <button id="lightbox-next" class="absolute right-6 h-12 w-12 rounded-full border border-white/20 hover:border-white/80 flex items-center justify-center text-white/70 hover:text-white transition-all cursor-pointer z-[110] bg-zinc-900/30 backdrop-blur-sm">
+    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+    </svg>
+  </button>
+  <div class="max-w-5xl max-h-[85vh] px-4 flex flex-col items-center gap-4">
+    <img id="lightbox-img" src="" alt="Lightbox image" class="max-w-full max-h-[75vh] object-contain rounded-lg transition-all duration-350 scale-95 shadow-2xl" />
+    <p id="lightbox-caption" class="text-white/60 font-mono text-[10px] uppercase tracking-widest"></p>
+  </div>
+</div>
+
+<script>
+  // --- Gallery Slider / Carousel with drag capabilities ---
+  const track = document.getElementById('gallery-track') as HTMLElement;
+  const slides = document.querySelectorAll('.gallery-slide') as NodeListOf<HTMLElement>;
+  const prevBtn = document.getElementById('gallery-prev') as HTMLButtonElement;
+  const nextBtn = document.getElementById('gallery-next') as HTMLButtonElement;
+  const pager = document.getElementById('gallery-pager') as HTMLElement;
+  const sliderContainer = document.getElementById('gallery-slider-container') as HTMLElement;
+
+  let currentIndex = 0;
+
+  function getVisibleSlides() {
+    if (window.innerWidth < 640) return 1;
+    if (window.innerWidth < 1024) return 2;
+    return 3;
+  }
+
+  function getMaxIndex() {
+    return Math.max(0, slides.length - getVisibleSlides());
+  }
+
+  function updateCarousel(transition = true) {
+    if (!track || slides.length === 0) return;
+
+    const maxIndex = getMaxIndex();
+    if (currentIndex > maxIndex) currentIndex = maxIndex;
+    if (currentIndex < 0) currentIndex = 0;
+
+    track.style.transition = transition ? 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)' : 'none';
+
+    const gap = 24;
+    const slideWidth = slides[0].getBoundingClientRect().width;
+    const translateX = currentIndex * (slideWidth + gap);
+
+    track.style.transform = `translateX(-${translateX}px)`;
+
+    const displayIndex = String(currentIndex + 1).padStart(2, '0');
+    const displayTotal = String(slides.length).padStart(2, '0');
+    if (pager) pager.textContent = `( ${displayIndex} / ${displayTotal} )`;
+
+    if (prevBtn) {
+      if (currentIndex === 0) {
+        prevBtn.setAttribute('disabled', 'true');
+        prevBtn.classList.add('opacity-40', 'cursor-not-allowed');
+      } else {
+        prevBtn.removeAttribute('disabled');
+        prevBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+      }
+    }
+
+    if (nextBtn) {
+      if (currentIndex >= maxIndex) {
+        nextBtn.setAttribute('disabled', 'true');
+        nextBtn.classList.add('opacity-40', 'cursor-not-allowed');
+      } else {
+        nextBtn.removeAttribute('disabled');
+        nextBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+      }
+    }
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      if (currentIndex > 0) { currentIndex--; updateCarousel(); }
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      if (currentIndex < getMaxIndex()) { currentIndex++; updateCarousel(); }
+    });
+  }
+
+  let isDragging = false;
+  let startX = 0;
+  let currentTranslate = 0;
+  let prevTranslate = 0;
+  let dragMoveOffset = 0;
+
+  if (sliderContainer) {
+    sliderContainer.addEventListener('mousedown', dragStart);
+    sliderContainer.addEventListener('touchstart', dragStart, { passive: true });
+    sliderContainer.addEventListener('mouseup', dragEnd);
+    sliderContainer.addEventListener('mouseleave', dragEnd);
+    sliderContainer.addEventListener('touchend', dragEnd);
+    sliderContainer.addEventListener('mousemove', dragMove);
+    sliderContainer.addEventListener('touchmove', dragMove, { passive: true });
+  }
+
+  function dragStart(event: MouseEvent | TouchEvent) {
+    isDragging = true;
+    startX = getPositionX(event);
+    const gap = 24;
+    const slideWidth = slides[0].getBoundingClientRect().width;
+    prevTranslate = -currentIndex * (slideWidth + gap);
+    track.style.transition = 'none';
+    dragMoveOffset = 0;
+  }
+
+  function dragMove(event: MouseEvent | TouchEvent) {
+    if (!isDragging) return;
+    const currentPosition = getPositionX(event);
+    const diffX = currentPosition - startX;
+    dragMoveOffset = diffX;
+    currentTranslate = prevTranslate + diffX;
+    track.style.transform = `translateX(${currentTranslate}px)`;
+  }
+
+  function dragEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+    if (dragMoveOffset < -50 && currentIndex < getMaxIndex()) {
+      currentIndex++;
+    } else if (dragMoveOffset > 50 && currentIndex > 0) {
+      currentIndex--;
+    }
+    updateCarousel();
+  }
+
+  function getPositionX(event: MouseEvent | TouchEvent) {
+    return 'touches' in event ? event.touches[0].clientX : event.pageX;
+  }
+
+  window.addEventListener('resize', () => updateCarousel(false));
+  updateCarousel();
+
+  // --- Lightbox ---
+  const lightbox = document.getElementById('lightbox') as HTMLElement;
+  const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
+  const lightboxCaption = document.getElementById('lightbox-caption') as HTMLElement;
+  const lightboxClose = document.getElementById('lightbox-close') as HTMLElement;
+  const lightboxPrev = document.getElementById('lightbox-prev') as HTMLElement;
+  const lightboxNext = document.getElementById('lightbox-next') as HTMLElement;
+  let lightboxIndex = 0;
+
+  const galleryImages = Array.from(slides).map(slide => {
+    const img = slide.querySelector('img') as HTMLImageElement | null;
+    return { src: img ? img.src : '', alt: img ? (img.alt || 'Galeria') : 'Galeria' };
+  });
+
+  function openLightbox(index: number) {
+    lightboxIndex = index;
+    const image = galleryImages[lightboxIndex];
+    if (lightboxImg && image) { lightboxImg.src = image.src; lightboxImg.alt = image.alt; }
+    if (lightboxCaption && image) lightboxCaption.textContent = image.alt;
+    if (lightbox) {
+      lightbox.classList.remove('hidden');
+      lightbox.classList.add('flex');
+      void lightbox.offsetWidth;
+      lightbox.classList.remove('opacity-0');
+      lightbox.classList.add('opacity-100');
+    }
+    if (lightboxImg) { lightboxImg.classList.remove('scale-95'); lightboxImg.classList.add('scale-100'); }
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    if (lightbox) { lightbox.classList.remove('opacity-100'); lightbox.classList.add('opacity-0'); }
+    if (lightboxImg) { lightboxImg.classList.remove('scale-100'); lightboxImg.classList.add('scale-95'); }
+    setTimeout(() => {
+      if (lightbox) { lightbox.classList.remove('flex'); lightbox.classList.add('hidden'); }
+      document.body.style.overflow = '';
+    }, 300);
+  }
+
+  function showNextLightbox() {
+    lightboxIndex = (lightboxIndex + 1) % galleryImages.length;
+    if (lightboxImg) { lightboxImg.classList.remove('opacity-100'); lightboxImg.classList.add('opacity-0'); }
+    setTimeout(() => {
+      if (lightboxImg) { lightboxImg.src = galleryImages[lightboxIndex].src; lightboxImg.alt = galleryImages[lightboxIndex].alt; lightboxImg.classList.remove('opacity-0'); lightboxImg.classList.add('opacity-100'); }
+      if (lightboxCaption) lightboxCaption.textContent = galleryImages[lightboxIndex].alt;
+    }, 150);
+  }
+
+  function showPrevLightbox() {
+    lightboxIndex = (lightboxIndex - 1 + galleryImages.length) % galleryImages.length;
+    if (lightboxImg) { lightboxImg.classList.remove('opacity-100'); lightboxImg.classList.add('opacity-0'); }
+    setTimeout(() => {
+      if (lightboxImg) { lightboxImg.src = galleryImages[lightboxIndex].src; lightboxImg.alt = galleryImages[lightboxIndex].alt; lightboxImg.classList.remove('opacity-0'); lightboxImg.classList.add('opacity-100'); }
+      if (lightboxCaption) lightboxCaption.textContent = galleryImages[lightboxIndex].alt;
+    }, 150);
+  }
+
+  slides.forEach((slide, idx) => {
+    let startClickX = 0;
+    slide.addEventListener('mousedown', (e) => { startClickX = e.pageX; });
+    slide.addEventListener('mouseup', (e) => { if (Math.abs(e.pageX - startClickX) < 5) openLightbox(idx); });
+    let startTouchX = 0;
+    slide.addEventListener('touchstart', (e) => { startTouchX = e.touches[0].clientX; }, { passive: true });
+    slide.addEventListener('touchend', (e) => { if (Math.abs(e.changedTouches[0].clientX - startTouchX) < 5) openLightbox(idx); });
+  });
+
+  if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+  if (lightboxPrev) lightboxPrev.addEventListener('click', showPrevLightbox);
+  if (lightboxNext) lightboxNext.addEventListener('click', showNextLightbox);
+  if (lightbox) lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+
+  document.addEventListener('keydown', (e) => {
+    if (lightbox && lightbox.classList.contains('flex')) {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') showNextLightbox();
+      if (e.key === 'ArrowLeft') showPrevLightbox();
+    }
+  });
+</script>

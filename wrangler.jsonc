@@ -1,0 +1,18 @@
+{
+	// IMPORTANTE: Cambiar "cliente-slug" por el identificador del cliente (ej: "kutral-climatizacion")
+	"name": "demo-oxen-start",
+	"compatibility_date": "2026-05-30",
+	"compatibility_flags": [
+		"global_fetch_strictly_public"
+	],
+	"main": "@astrojs/cloudflare/entrypoints/server",
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS",
+		// Asegura que las peticiones a rutas inexistentes carguen la página 404 del sitio
+		"not_found_handling": "404-page"
+	},
+	"observability": {
+		"enabled": true
+	}
+}

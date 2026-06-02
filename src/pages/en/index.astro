@@ -1,0 +1,145 @@
+---
+import BaseLayout from "../../layouts/base-layout.astro";
+import { businessInfo } from "../../config/business-info";
+import ContactForm from "../../components/forms/contact-form";
+import { WhatsAppWidget } from "../../components/whatsapp-widget";
+
+// Sections
+import Navbar from "../../components/sections/navbar.astro";
+import Hero from "../../components/sections/hero.astro";
+import ClientLogos from "../../components/sections/client-logos.astro";
+import About from "../../components/sections/about.astro";
+import Process from "../../components/sections/process.astro";
+import Services from "../../components/sections/services.astro";
+import Gallery from "../../components/sections/gallery.astro";
+import Testimonials from "../../components/sections/testimonials.astro";
+import Team from "../../components/sections/team.astro";
+import CTA from "../../components/sections/cta.astro";
+import Footer from "../../components/sections/footer.astro";
+
+import { translations } from "../../config/translations";
+
+const locale = (Astro.currentLocale === "en" ? "en" : "es") as "es" | "en";
+const tContact = translations[locale].contact;
+---
+
+<BaseLayout>
+  <Navbar />
+
+  <Hero />
+  <ClientLogos />
+  <About />
+  <Process />
+  <Services />
+  <Gallery />
+  <Testimonials />
+  <Team />
+  <CTA />
+
+  <!-- Contact + Map -->
+  <section id="contact" class="py-20 bg-background border-t border-border/50 transition-colors duration-300 relative overflow-hidden reveal">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
+
+        <!-- Info -->
+        <div class="lg:col-span-5 space-y-12 reveal-left">
+          <div class="space-y-6">
+            <span class="font-mono text-xs uppercase tracking-widest text-muted-foreground block">{tContact.label}</span>
+            <h2 class="text-4xl sm:text-5xl font-heading font-extrabold leading-tight tracking-tight text-foreground uppercase">
+              {tContact.titlePart1}<br />
+              <span class="text-primary font-light">{tContact.titlePart2}</span>
+            </h2>
+            <p class="text-base text-muted-foreground max-w-md leading-relaxed">
+              {tContact.desc}
+            </p>
+          </div>
+
+          <div class="space-y-8 pt-8 border-t border-border max-w-md">
+            <div class="space-y-2">
+              <span class="text-muted-foreground font-mono text-xs uppercase tracking-widest font-semibold block">{tContact.mainOffice}</span>
+              <p class="text-base text-foreground leading-normal font-semibold">
+                {businessInfo.location.address}<br />
+                {businessInfo.location.city}, {businessInfo.location.region}
+              </p>
+              {businessInfo.location.mapDirectionsUrl && (
+                <a href={businessInfo.location.mapDirectionsUrl} target="_blank" rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1.5 text-xs text-primary hover:underline font-medium mt-1">
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  View on Google Maps
+                </a>
+              )}
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <span class="text-muted-foreground font-mono text-xs uppercase tracking-widest font-semibold block">{tContact.callSupport}</span>
+                <a href={`tel:${businessInfo.contact.phone}`} class="text-base font-bold text-foreground hover:underline transition-all">
+                  {businessInfo.contact.phone}
+                </a>
+              </div>
+              <div class="space-y-2">
+                <span class="text-muted-foreground font-mono text-xs uppercase tracking-widest font-semibold block">{tContact.emailUs}</span>
+                <a href={`mailto:${businessInfo.contact.email}`} class="text-base font-bold text-foreground hover:underline transition-all break-all">
+                  {businessInfo.contact.email}
+                </a>
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <span class="text-muted-foreground font-mono text-xs uppercase tracking-widest font-semibold block">{tContact.businessHours}</span>
+              <p class="text-base text-muted-foreground leading-normal">
+                {tContact.weekday}: {businessInfo.hours.weekday}<br />
+                {tContact.saturday}: {businessInfo.hours.saturday ?? "Closed"}<br />
+                {tContact.sunday}: {!businessInfo.hours.sunday || businessInfo.hours.sunday === "Closed" ? "Closed" : businessInfo.hours.sunday}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="lg:col-span-7 reveal-right delay-150 w-full">
+          <ContactForm client:load locale={locale} />
+        </div>
+
+      </div>
+
+      <!-- Map embed -->
+      {businessInfo.location.mapEmbedUrl && (
+        <div class="mt-16 reveal">
+          <div class="w-full h-72 md:h-96 rounded-2xl overflow-hidden border border-border/50">
+            <iframe
+              src={businessInfo.location.mapEmbedUrl}
+              width="100%"
+              height="100%"
+              style="border:0;"
+              allowfullscreen
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Our location"
+            />
+          </div>
+        </div>
+      )}
+
+    </div>
+  </section>
+
+  <WhatsAppWidget client:idle locale={locale} />
+  <Footer />
+
+  <script>
+    const revealElements = document.querySelectorAll('.reveal, .reveal-scale, .reveal-left, .reveal-right');
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('reveal-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { root: null, rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+    revealElements.forEach(el => revealObserver.observe(el));
+  </script>
+</BaseLayout>

@@ -1,0 +1,269 @@
+---
+import "@/styles/global.css";
+import { siteConfig } from "@/config/site-config";
+import { businessInfo } from "@/config/business-info";
+import { translations } from "@/config/translations";
+import { Toaster } from "@/components/ui/sonner";
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  noindex?: boolean;
+}
+
+const { title, description, ogImage, noindex = false } = Astro.props;
+
+// Locale detection — consistent with all other components
+const currentLocale = Astro.currentLocale ?? siteConfig.i18n.defaultLocale;
+const locale = (currentLocale === "en" ? "en" : "es") as "es" | "en";
+const tSeo = translations[locale].seo;
+
+// HTML lang attribute: use current locale (es-CL for Spanish, en for English)
+const htmlLang = currentLocale;
+
+// Page title: prop override > locale-specific SEO title from translations
+const pageTitle = title ? `${title} | ${businessInfo.brand.name}` : tSeo.title;
+
+// Description: prop override > locale-specific description from translations
+const pageDescription = description ?? tSeo.description;
+
+// Canonical URL for this specific page
+const canonicalUrl = new URL(Astro.url.pathname, siteConfig.canonicalUrl).toString();
+
+// Absolute OG image URL
+const absoluteOgImage = ogImage
+  ? new URL(ogImage, siteConfig.canonicalUrl).toString()
+  : new URL(siteConfig.seo.defaultOgImage, siteConfig.canonicalUrl).toString();
+
+// og:locale — maps BCP47 locale tag to Facebook locale format
+const ogLocaleMap: Record<string, string> = {
+  "es-CL": "es_CL",
+  "en":    "en_US",
+  "pt-BR": "pt_BR",
+  "fr":    "fr_FR",
+  "de":    "de_DE",
+};
+const ogLocale = ogLocaleMap[currentLocale] ?? currentLocale.replace("-", "_");
+
+// og:locale:alternate — all other registered locales
+const ogAlternateLocales = siteConfig.i18n.locales
+  .filter(loc => loc !== currentLocale)
+  .map(loc => ogLocaleMap[loc] ?? loc.replace("-", "_"));
+
+// hreflang links — one per registered locale + x-default
+const hreflangLinks = siteConfig.i18n.locales.map(loc => ({
+  hreflang: loc,
+  href: loc === siteConfig.i18n.defaultLocale
+    ? new URL("/", siteConfig.canonicalUrl).href
+    : new URL(`/${loc}`, siteConfig.canonicalUrl).href,
+}));
+
+// Opening hours parsing helper
+const parseHours = (hoursStr?: string) => {
+  if (!hoursStr) return null;
+  const match = hoursStr.match(/(\d{1,2}:\d{2})/g);
+  return match && match.length >= 2
+    ? { opens: match[0].padStart(5, "0"), closes: match[1].padStart(5, "0") }
+    : { opens: "09:00", closes: "18:30" };
+};
+
+const weekdayHours = parseHours(businessInfo.hours.weekday) ?? { opens: "09:00", closes: "18:30" };
+const saturdayHours = businessInfo.hours.saturday ? parseHours(businessInfo.hours.saturday) : null;
+
+// ─── Schema.org JSON-LD (@graph bundles all schemas into one script tag) ───
+
+const localBusinessSchema = {
+  "@type": "LocalBusiness",
+  "@id": `${siteConfig.canonicalUrl}/#business`,
+  "name": businessInfo.brand.name,
+  "legalName": businessInfo.brand.legalName,
+  "taxID": businessInfo.brand.rut,
+  "description": businessInfo.brand.description,
+  "url": siteConfig.canonicalUrl,
+  "logo": {
+    "@type": "ImageObject",
+    "url": new URL("/favicon.svg", siteConfig.canonicalUrl).href,
+  },
+  "image": absoluteOgImage,
+  "telephone": businessInfo.contact.phone,
+  "email": businessInfo.contact.email,
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": businessInfo.location.address,
+    "addressLocality": businessInfo.location.city,
+    "addressRegion": businessInfo.location.region,
+    "addressCountry": "CL",
+  },
+  ...(businessInfo.seo?.geo && {
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": businessInfo.seo.geo.latitude,
+      "longitude": businessInfo.seo.geo.longitude,
+    },
+  }),
+  ...(businessInfo.seo?.priceRange && { "priceRange": businessInfo.seo.priceRange }),
+  ...(businessInfo.seo?.areaServed && {
+    "areaServed": businessInfo.seo.areaServed.map(area => ({
+      "@type": "Place",
+      "name": area,
+    })),
+  }),
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "opens": weekdayHours.opens,
+      "closes": weekdayHours.closes,
+    },
+    ...(saturdayHours
+      ? [{ "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": saturdayHours.opens, "closes": saturdayHours.closes }]
+      : []),
+  ],
+  "sameAs": [
+    businessInfo.socials?.instagram,
+    businessInfo.socials?.facebook,
+    businessInfo.socials?.linkedin,
+    businessInfo.socials?.youtube,
+  ].filter(Boolean),
+};
+
+const webSiteSchema = {
+  "@type": "WebSite",
+  "@id": `${siteConfig.canonicalUrl}/#website`,
+  "name": businessInfo.brand.name,
+  "url": siteConfig.canonicalUrl,
+  "description": tSeo.description,
+  "publisher": { "@id": `${siteConfig.canonicalUrl}/#business` },
+  "inLanguage": siteConfig.i18n.locales,
+};
+
+// FAQPage schema — critical for AEO (Answer Engine Optimization)
+// AI answer engines (ChatGPT, Perplexity, Google AI, etc.) parse this schema
+// to surface your business answers directly in AI-generated responses.
+const faqSchema = businessInfo.seo?.faq?.length
+  ? {
+      "@type": "FAQPage",
+      "@id": `${siteConfig.canonicalUrl}/#faq`,
+      "mainEntity": businessInfo.seo.faq.map(item => ({
+        "@type": "Question",
+        "name": item.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": item.answer,
+        },
+      })),
+    }
+  : null;
+
+const schemaGraph = {
+  "@context": "https://schema.org",
+  "@graph": [
+    localBusinessSchema,
+    webSiteSchema,
+    ...(faqSchema ? [faqSchema] : []),
+  ],
+};
+---
+
+<!doctype html>
+<html lang={htmlLang} class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Theme color for browser chrome -->
+    <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+
+    <!-- Dark Mode Initializer (inline to avoid FOUC) -->
+    <script is:inline>
+      const theme = (() => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          return localStorage.getItem('theme');
+        }
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      })();
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+    </script>
+
+    <!-- ─── SEO Core ─── -->
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <meta name="keywords" content={tSeo.keywords} />
+    <meta name="author" content={siteConfig.seo.author} />
+    <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- ─── Hreflang (multilingual SEO) ─── -->
+    {hreflangLinks.map(link => (
+      <link rel="alternate" hreflang={link.hreflang} href={link.href} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={new URL("/", siteConfig.canonicalUrl).href} />
+
+    <!-- ─── Open Graph ─── -->
+    <meta property="og:type" content={siteConfig.seo.ogType} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:image" content={absoluteOgImage} />
+    <meta property="og:image:alt" content={pageTitle} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content={businessInfo.brand.name} />
+    <meta property="og:locale" content={ogLocale} />
+    {ogAlternateLocales.map(alt => (
+      <meta property="og:locale:alternate" content={alt} />
+    ))}
+
+    <!-- ─── Twitter / X Card ─── -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={absoluteOgImage} />
+    <meta name="twitter:image:alt" content={pageTitle} />
+
+    <!-- ─── Analytics (optional) ─── -->
+    {siteConfig.analytics?.googleAnalyticsId && (
+      <script is:inline type="text/partytown" src={`https://www.googletagmanager.com/gtag/js?id=${siteConfig.analytics.googleAnalyticsId}`} />
+      <script is:inline type="text/partytown" define:vars={{ gaId: siteConfig.analytics.googleAnalyticsId }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', gaId);
+      </script>
+    )}
+
+    {siteConfig.analytics?.metaPixelId && (
+      <script is:inline define:vars={{ pixelId: siteConfig.analytics.metaPixelId }}>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window,document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', pixelId);
+        fbq('track', 'PageView');
+      </script>
+      <noscript>
+        <img height="1" width="1" style="display:none"
+          src={`https://www.facebook.com/tr?id=${siteConfig.analytics.metaPixelId}&ev=PageView&noscript=1`} />
+      </noscript>
+    )}
+
+    <!-- ─── Schema.org JSON-LD ─── -->
+    <!-- @graph bundles LocalBusiness + WebSite + FAQPage (AEO) in one request -->
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(schemaGraph, null, 0)} />
+  </head>
+
+  <body class="bg-background text-foreground min-h-screen flex flex-col font-sans antialiased">
+    <slot />
+    <Toaster client:load />
+  </body>
+</html>

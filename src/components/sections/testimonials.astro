@@ -1,0 +1,73 @@
+---
+import { businessInfo } from "../../config/business-info";
+import { translations } from "../../config/translations";
+
+const locale = (Astro.currentLocale === "en" ? "en" : "es") as "es" | "en";
+const t = translations[locale].testimonials;
+
+const testimonials = businessInfo.testimonials ?? [];
+---
+
+{testimonials.length > 0 && (
+  <section id="testimonials" class="py-20 bg-background border-t border-border/50 transition-colors duration-300 reveal">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Header -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start mb-16">
+        <div class="lg:col-span-3 reveal-left">
+          <span class="font-mono text-xs uppercase tracking-widest text-muted-foreground block">{t.label}</span>
+        </div>
+        <div class="lg:col-span-9 reveal-right">
+          <h2 class="text-4xl sm:text-5xl font-heading font-extrabold leading-tight tracking-tight text-foreground uppercase">
+            {t.titlePart1}<br />
+            <span class="text-primary font-light">{t.titlePart2}</span>
+          </h2>
+        </div>
+      </div>
+
+      <!-- Cards grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {testimonials.map((item, i) => (
+          <div class={`flex flex-col justify-between rounded-2xl border border-border/50 bg-card p-7 reveal delay-${i * 100} hover:border-border transition-colors duration-300`}>
+
+            <!-- Quote mark -->
+            <div class="mb-5">
+              <svg class="w-8 h-8 text-primary/30" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+              </svg>
+            </div>
+
+            <!-- Quote text -->
+            <p class="text-sm text-foreground/80 leading-relaxed flex-1 mb-6">
+              {item.quote}
+            </p>
+
+            <!-- Author -->
+            <div class="flex items-center gap-3 pt-5 border-t border-border/50">
+              {item.imageUrl ? (
+                <img
+                  src={item.imageUrl}
+                  alt={item.name}
+                  class="w-10 h-10 rounded-full object-cover border border-border shrink-0"
+                  loading="lazy"
+                />
+              ) : (
+                <div class="w-10 h-10 rounded-full bg-muted border border-border flex items-center justify-center shrink-0">
+                  <span class="text-xs font-bold text-muted-foreground select-none">
+                    {item.name.trim().split(/\s+/).slice(0, 2).map(n => n[0]).join('').toUpperCase()}
+                  </span>
+                </div>
+              )}
+              <div class="min-w-0">
+                <p class="text-sm font-semibold text-foreground truncate">{item.name}</p>
+                <p class="text-xs text-muted-foreground truncate">{item.role} · {item.company}</p>
+              </div>
+            </div>
+
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </section>
+)}

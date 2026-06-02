@@ -1,0 +1,38 @@
+---
+import { businessInfo } from "../../config/business-info";
+import { translations } from "../../config/translations";
+
+const locale = (Astro.currentLocale === "en" ? "en" : "es") as "es" | "en";
+const t = translations[locale].clientLogos;
+
+const clients = businessInfo.clients ?? [];
+---
+
+{clients.length > 0 && (
+  <section class="py-10 border-y border-border/40 bg-muted/40 transition-colors duration-300 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <p class="text-center font-mono text-[10px] uppercase tracking-widest text-muted-foreground/70 mb-8">
+        {t.label}
+      </p>
+      <div class="flex flex-wrap justify-center items-center gap-x-10 gap-y-5">
+        {clients.map(client => (
+          client.logoUrl ? (
+            client.url ? (
+              <a href={client.url} target="_blank" rel="noopener noreferrer" aria-label={client.name}
+                class="block opacity-50 hover:opacity-90 transition-opacity grayscale hover:grayscale-0">
+                <img src={client.logoUrl} alt={client.name} class="h-7 object-contain" loading="lazy" />
+              </a>
+            ) : (
+              <img src={client.logoUrl} alt={client.name}
+                class="h-7 object-contain opacity-50 hover:opacity-90 transition-opacity grayscale hover:grayscale-0" loading="lazy" />
+            )
+          ) : (
+            <span class="text-xs font-semibold uppercase tracking-widest text-muted-foreground/60 hover:text-muted-foreground transition-colors select-none whitespace-nowrap">
+              {client.name}
+            </span>
+          )
+        ))}
+      </div>
+    </div>
+  </section>
+)}

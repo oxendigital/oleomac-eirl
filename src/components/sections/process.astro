@@ -1,0 +1,52 @@
+---
+import { translations } from "../../config/translations";
+
+const locale = (Astro.currentLocale === "en" ? "en" : "es") as "es" | "en";
+const t = translations[locale].process;
+---
+
+<!-- Process / How We Work Section -->
+<section id="process" class="py-20 bg-muted transition-colors duration-300 reveal">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- Header -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-end mb-16">
+      <div class="lg:col-span-3 reveal-left">
+        <span class="font-mono text-xs uppercase tracking-widest text-muted-foreground block">{t.label}</span>
+      </div>
+      <div class="lg:col-span-9 reveal-right">
+        <h2 class="text-4xl sm:text-5xl font-heading font-extrabold leading-tight tracking-tight text-foreground uppercase">
+          {t.titlePart1}<br />
+          <span class="text-primary font-light">{t.titlePart2}</span>
+        </h2>
+      </div>
+    </div>
+
+    <!-- Steps -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0">
+      {t.steps.map((step, i) => (
+        <div class={`relative p-8 reveal delay-${i * 100} group`}>
+          <!-- Step connector (right border on all but last col) -->
+          {i < t.steps.length - 1 && (
+            <div class="hidden lg:block absolute top-10 right-0 w-px h-12 bg-border/60" />
+          )}
+
+          <!-- Step number -->
+          <span class="block font-heading font-extrabold text-5xl leading-none text-foreground/10 mb-6 select-none group-hover:text-primary/20 transition-colors duration-300">
+            0{i + 1}
+          </span>
+
+          <!-- Step content -->
+          <div class="space-y-3">
+            <h3 class="text-base font-bold text-foreground">{step.title}</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
+          </div>
+
+          <!-- Bottom accent on hover -->
+          <div class="absolute bottom-0 left-8 right-8 h-px bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>

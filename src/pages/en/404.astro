@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../../layouts/base-layout.astro";
+import { businessInfo } from "../../config/business-info";
+---
+
+<BaseLayout title="Page Not Found">
+  <div class="flex-grow flex items-center justify-center py-24 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full text-center space-y-6 bg-card p-8 rounded-2xl border border-border/50 shadow-xl">
+      <div class="h-16 w-16 mx-auto rounded-full bg-destructive/10 flex items-center justify-center text-destructive font-extrabold text-2xl">
+        404
+      </div>
+
+      <div class="space-y-2">
+        <h1 class="text-4xl font-extrabold tracking-tight text-foreground">Page Not Found</h1>
+        <p class="text-base text-muted-foreground">
+          Sorry, the page you are looking for does not exist or has been moved.
+        </p>
+      </div>
+
+      <div class="pt-4">
+        <a href="/en" class="inline-flex items-center justify-center w-full px-6 py-3 rounded bg-foreground text-background font-semibold hover:bg-foreground/90 transition-colors">
+          Go Back Home
+        </a>
+      </div>
+
+      <p class="text-xs text-muted-foreground">
+        &copy; {new Date().getFullYear()} {businessInfo.brand.name}
+      </p>
+    </div>
+  </div>
+</BaseLayout>

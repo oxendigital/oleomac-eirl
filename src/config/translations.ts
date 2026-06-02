@@ -94,7 +94,6 @@ export interface Translations {
   footer: {
     ctaTitle: string;
     ctaDesc: string;
-    networkStatus: string;
     quickLinks: string;
     copyright: string;
     developedBy: string;
@@ -270,7 +269,6 @@ export const translations: Record<"es" | "en", Translations> = {
     footer: {
       ctaTitle: "¿Listo para optimizar sus sistemas?",
       ctaDesc: "Agende hoy una inspección técnica o solicite una cotización de repuestos.",
-      networkStatus: "Operaciones en la Región de Antofagasta",
       quickLinks: "Enlaces Rápidos",
       copyright: "Todos los derechos reservados.",
       developedBy: "Desarrollado y mantenido por",
@@ -458,7 +456,6 @@ export const translations: Record<"es" | "en", Translations> = {
     footer: {
       ctaTitle: "Ready to optimize your systems?",
       ctaDesc: "Schedule a technical inspection or request a spare parts quote today.",
-      networkStatus: "Active Operations in the Antofagasta Region",
       quickLinks: "Quick Links",
       copyright: "All rights reserved.",
       developedBy: "Developed and maintained by",

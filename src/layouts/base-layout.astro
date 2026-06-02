@@ -83,7 +83,7 @@ const localBusinessSchema = {
   "url": siteConfig.canonicalUrl,
   "logo": {
     "@type": "ImageObject",
-    "url": new URL("/favicon.svg", siteConfig.canonicalUrl).href,
+    "url": new URL("/favicon.jpg", siteConfig.canonicalUrl).href,
   },
   "image": absoluteOgImage,
   "telephone": businessInfo.contact.phone,
@@ -174,8 +174,8 @@ const schemaGraph = {
     <meta name="generator" content={Astro.generator} />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.jpg" />
+    <link rel="icon" href="/favicon.jpg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <!-- Theme color for browser chrome -->

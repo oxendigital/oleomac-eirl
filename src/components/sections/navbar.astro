@@ -26,13 +26,8 @@ const showLangSelector = localeOptions.length > 1;
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
 
     <!-- Logo -->
-    <a href={locale === "es" ? "#home" : "/en#home"} class="flex items-center gap-2.5 shrink-0">
-      <div class="h-8 w-8 rounded bg-foreground flex items-center justify-center text-background font-bold text-sm font-heading">
-        {businessInfo.brand.name.charAt(0)}
-      </div>
-      <span class="font-heading text-xl tracking-tight text-foreground font-bold">
-        {businessInfo.brand.name}
-      </span>
+    <a href={locale === "es" ? "#home" : "/en#home"} class="flex items-center gap-2 shrink-0">
+      <img src={businessInfo.brand.url} alt={businessInfo.brand.name} class="h-10 w-auto object-contain" />
     </a>
 
     <!-- Desktop Navigation -->

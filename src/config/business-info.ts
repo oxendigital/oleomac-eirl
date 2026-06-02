@@ -8,6 +8,11 @@ export interface BusinessInfo {
    */
   brand: {
     /**
+     * URL del sitio web de la empresa.
+     * @example "https://kutral.cl"
+     */
+    url: string;
+    /**
      * Nombre comercial o de fantasía que se muestra en el sitio.
      * @example "Kutral Climatización"
      */
@@ -250,101 +255,153 @@ export interface BusinessInfo {
   };
 }
 
+import logo from "@/public/oleomac.svg"
+
 export const businessInfo: BusinessInfo = {
   brand: {
-    name: "Iteloogs Servicios",
-    legalName: "Iteloogs Servicios Industriales y Montajes Limitada",
-    rut: "76.432.190-K",
-    tagline: "Montajes Industriales, Climatización y Mantenimiento de Precisión",
-    description: "Somos una empresa chilena especializada en el diseño, montaje y mantenimiento de infraestructura industrial. Con más de 12 años de trayectoria, entregamos soluciones integrales de climatización, estructuras metálicas y mantenimiento preventivo para el sector industrial, comercial y minero a lo largo de Chile.",
-    shortDescription: "Somos una empresa chilena especializada en el diseño, montaje y mantenimiento de infraestructura industrial."
+    url: logo.src,
+    name: "Oleomac",
+    legalName: "Oleomac E.I.R.L.",
+    rut: "00.000.000-0",
+    tagline: "Servicios y Montajes Oleohidráulicos de Precisión",
+    description: "Somos una empresa regional con años de trayectoria en el mercado oleohidráulico. Nos especializamos en la reparación y mantención de componentes, montajes oleohidráulicos, y la construcción y modificación de equipos con diseños innovadores para entregar soluciones rápidas, reales y a costos razonables.",
+    shortDescription: "Empresa regional especializada en servicios, mantención, montajes y construcción de equipos oleohidráulicos."
   },
   contact: {
-    email: "contacto@iteloogs.cl",
-    phone: "+56 2 2987 6543",
-    whatsapp: "+56987654321",
-    whatsappMessage: "Hola Iteloogs, quisiera solicitar una cotización para un proyecto de montaje o mantenimiento industrial.",
-    formDestinationEmail: "proyectos@iteloogs.cl",
+    email: "vosses@oleomac-anf.cl",
+    phone: "+56 9 8449 1811",
+    whatsapp: "+56984491811",
+    whatsappMessage: "Hola Oleomac, quisiera solicitar una cotización para un proyecto o servicio oleohidráulico.",
+    formDestinationEmail: "vosses@oleomac-anf.cl",
   },
   location: {
-    address: "Av. Las Industrias 4850, Bodega 12",
-    city: "San Joaquín, Santiago",
-    region: "Región Metropolitana",
-    mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3326.852179836561!2d-70.6253457!3d-33.5002014!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662dae89456bbd9%3A0x6b4458f2762e5b8e!2sSan%20Joaqu%C3%ADn%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses!2scl!4v1717085000000!5m2!1ses!2scl",
-    mapDirectionsUrl: "https://maps.app.goo.gl/Santiago",
+    address: "Avenida Radomiro Tomic 7793",
+    city: "Antofagasta",
+    region: "Región de Antofagasta",
+    mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.3481491745423!2d-70.38827372481617!3d-23.59182397877995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x96afd5697d27e997%3A0x44613bb47432eb67!2sAv.%20Radomiro%20Tomic%207793%2C%20Antofagasta!5e0!3m2!1ses!2scl!4v1717085000000!5m2!1ses!2scl",
+    mapDirectionsUrl: "https://maps.google.com/?q=Avenida+Radomiro+Tomic+7793,+Antofagasta",
   },
   hours: {
-    weekday: "Lunes a Viernes de 08:30 a 18:00",
-    saturday: "Sábados de 09:00 a 13:00",
-    sunday: "Cerrado",
+    weekday: "08:00 - 17:00",
   },
   socials: {
-    linkedin: "https://linkedin.com/company/iteloogs-servicios",
-    instagram: "https://instagram.com/iteloogs",
-    facebook: "https://facebook.com/iteloogs",
+    instagram: "https://www.instagram.com/oleo_mac2026/"
   },
-  clients: [
-    { name: "Minera del Pacífico" },
-    { name: "Industrias Alimentarias del Sur" },
-    { name: "Grupo Logístico Andino" },
-    { name: "Constructora Vial Norte" },
-    { name: "Plásticos Meridional" },
-  ],
-  testimonials: [
-    {
-      quote: "Iteloogs ejecutó el montaje de nuestra nueva línea de producción dentro del plazo comprometido y con un estándar de seguridad impecable. Altamente recomendados para proyectos críticos.",
-      name: "Roberto Fuentes",
-      role: "Gerente de Operaciones",
-      company: "Minera del Pacífico S.A.",
-    },
-    {
-      quote: "Llevamos 3 años trabajando con ellos en el mantenimiento preventivo de nuestros equipos HVAC. Cero fallas no programadas desde que iniciamos el contrato. Excelente equipo técnico.",
-      name: "Claudia Reyes",
-      role: "Jefa de Planta",
-      company: "Industrias Alimentarias del Sur",
-    },
-    {
-      quote: "Resolvieron en menos de 48 horas una falla crítica en nuestra sala de servidores que nos tenía al borde de detener la producción. Respuesta rápida y profesionalismo total.",
-      name: "Andrés Muñoz",
-      role: "Director de Infraestructura",
-      company: "Grupo Logístico Andino",
-    },
-  ],
+  clients: [],
+  testimonials: [],
   certifications: [
-    { name: "ISO 9001:2015", issuer: "Bureau Veritas" },
-    { name: "OHSAS 18001", issuer: "Mutual de Seguridad" },
-    { name: "Empresa Socia", issuer: "ACHS" },
+    { name: "Norma ISO 4406/99", issuer: "Certificación de Limpieza de Fluidos" },
+    { name: "ISO 8434-1 / SAE J514", issuer: "Sistemas de Montaje de Piping" }
+  ],
+  gallery: [
+    {
+      url: "/assets-oleomac/img1.avif",
+      title: "Reparación y Mantención",
+      description: "Intervención de componentes dañados y mantenciones preventivas."
+    },
+    {
+      url: "/assets-oleomac/img2.avif",
+      title: "Montajes Oleohidráulicos",
+      description: "Montaje de líneas de conducción rígida en acero carbono e inoxidable."
+    },
+    {
+      url: "/assets-oleomac/img3.avif",
+      title: "Construcción de Equipos",
+      description: "Fabricación de centrales hidráulicas y unidades a la medida."
+    },
+    {
+      url: "/assets-oleomac/img4.avif",
+      title: "Análisis y Conteo Láser",
+      description: "Análisis de fluidos con contador de partículas láser."
+    },
+    {
+      url: "/assets-oleomac/img5.avif",
+      title: "Limpieza por Flushing",
+      description: "Limpieza interna de conductos con flujo turbulento."
+    },
+    {
+      url: "/assets-oleomac/img6.avif",
+      title: "Importación y Repuestos",
+      description: "Venta de componentes oleohidráulicos y repuestos multimarca."
+    },
+    {
+      url: "/assets-oleomac/img11.avif",
+      title: "Diagnóstico Hidráulico",
+      description: "Evaluación técnica de parámetros y presión de fluidos en terreno."
+    },
+    {
+      url: "/assets-oleomac/img12.avif",
+      title: "Banco de Pruebas",
+      description: "Certificación de funcionamiento de cilindros y bombas hidráulicas."
+    },
+    {
+      url: "/assets-oleomac/img13.avif",
+      title: "Mangueras de Alta Presión",
+      description: "Armado, prensado y testeo de conexiones oleohidráulicas."
+    },
+    {
+      url: "/assets-oleomac/img15.avif",
+      title: "Servicios en Terreno",
+      description: "Asistencia, diagnóstico y mantenimiento hidráulico directo en faena."
+    },
+    {
+      url: "/assets-oleomac/img16.avif",
+      title: "Infraestructura de Taller",
+      description: "Taller equipado para el desarme y reparación de grandes componentes."
+    },
+    {
+      url: "/assets-oleomac/img17.avif",
+      title: "Válvulas y Distribución",
+      description: "Mantención y configuración experta de bancos de válvulas industriales."
+    }
+  ],
+  team: [
+    {
+      name: "Victor Ossas",
+      role: "Fundador y Jefe Operaciones",
+      email: "vosses@oleomac-anf.cl"
+    },
+    {
+      name: "Nombre Apellido",
+      role: "Cargo o Rol",
+      email: "vosses@oleomac-anf.cl"
+    },
+    {
+      name: "Nombre Apellido",
+      role: "Cargo o Rol",
+      email: "vosses@oleomac-anf.cl"
+    }
   ],
   hiring: false,
   whatsappContacts: [
     {
-      name: "Iteloogs Servicios",
-      department: "Proyectos y Cotizaciones",
-      phone: "56987654321",
-      message: "Hola Iteloogs, quisiera solicitar una cotización para un proyecto de montaje o mantenimiento industrial.",
+      name: "Oleomac Servicios",
+      department: "Cotizaciones y Servicios",
+      phone: "56984491811",
+      message: "Hola Oleomac, quisiera solicitar una cotización para un proyecto o servicio oleohidráulico.",
     },
   ],
   seo: {
-    geo: { latitude: -33.4979, longitude: -70.6145 },
+    geo: { latitude: -23.591824, longitude: -70.388274 },
     priceRange: "$$",
-    areaServed: ["Santiago", "Valparaíso", "Concepción", "Antofagasta", "Chile"],
+    areaServed: ["Antofagasta", "Calama", "Mejillones", "Tocopilla", "Región de Antofagasta", "Chile"],
     faq: [
       {
-        question: "¿En qué regiones de Chile operan?",
-        answer: "Operamos en todo Chile con base principal en la Región Metropolitana (Santiago). Desarrollamos proyectos en minería en el norte, industrias en la RM y Biobío, y atendemos otras regiones según requerimiento.",
+        question: "¿Qué servicios oleohidráulicos ofrecen?",
+        answer: "Ofrecemos análisis de fluidos con contador de partículas láser, análisis de rendimiento volumétrico de bombas y motores, microfiltrado, limpieza flushing, montaje de piping rígido en acero carbono/inoxidable, y reparación de componentes dañados."
       },
       {
-        question: "¿Qué tipo de proyectos de montaje realizan?",
-        answer: "Realizamos montaje de estructuras metálicas, tuberías industriales, equipos HVAC, sistemas de ventilación mecánica y redes de fluidos para plantas industriales, mineras y comerciales en Chile.",
+        question: "¿Qué tipo de equipos fabrican o construyen?",
+        answer: "Fabricamos centrales oleohidráulicas, equipos de microfiltrado, bancos de pruebas para componentes, unidades de trasvasije y unidades auxiliares de poder (A.P.U.), adaptados a los requerimientos del cliente."
       },
       {
-        question: "¿Ofrecen mantenimiento preventivo y correctivo?",
-        answer: "Sí. Contamos con equipos técnicos para mantenimiento preventivo programado y mantenimiento correctivo de emergencia de sistemas de climatización HVAC e infraestructura industrial.",
+        question: "¿Dónde están ubicados y cuál es su horario?",
+        answer: "Estamos ubicados en Avenida Radomiro Tomic 7793, Antofagasta. Atendemos de Lunes a Viernes de 08:00 a 17:00 horas."
       },
       {
-        question: "¿Trabajan con empresas medianas y grandes?",
-        answer: "Trabajamos principalmente con pymes industriales, empresas constructoras, empresas mineras y corporaciones que requieren soporte técnico especializado en montaje y mantenimiento de instalaciones.",
-      },
+        question: "¿Venden repuestos o componentes oleohidráulicos?",
+        answer: "Sí, realizamos importación de componentes oleohidráulicos y venta de repuestos especializados para maquinarias móviles e industriales."
+      }
     ],
   },
 };

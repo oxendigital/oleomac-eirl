@@ -1,6 +1,4 @@
 ---
-import { Image } from "astro:assets";
-import ctaLoading from "../../assets/cta-loading.png";
 import { translations } from "../../config/translations";
 
 const locale = (Astro.currentLocale === "en" ? "en" : "es") as "es" | "en";
@@ -12,10 +10,11 @@ const t = translations[locale].cta;
 
   <!-- Background Image -->
   <div class="absolute inset-0">
-    <Image
-      src={ctaLoading}
-      alt="Loading cargo truck background"
+    <img
+      src="/assets-oleomac/img3.avif"
+      alt="Taller y operaciones oleohidráulicas Oleomac"
       class="w-full h-full object-cover opacity-25 transition-transform duration-[8000ms] group-hover:scale-105 ease-out"
+      loading="lazy"
     />
     <div class="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/75 to-transparent"></div>
     <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/60 via-transparent to-transparent"></div>

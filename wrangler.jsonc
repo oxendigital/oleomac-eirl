@@ -1,6 +1,6 @@
 {
 	// IMPORTANTE: Cambiar "cliente-slug" por el identificador del cliente (ej: "kutral-climatizacion")
-	"name": "demo-oxen-start",
+	"name": "oleomac-eirl",
 	"compatibility_date": "2026-05-30",
 	"compatibility_flags": [
 		"global_fetch_strictly_public"

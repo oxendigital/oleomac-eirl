@@ -1,9 +1,4 @@
 ---
-import { Image } from "astro:assets";
-import servicesDock from "../../assets/services-dock.png";
-import galleryTruck from "../../assets/gallery-truck.png";
-import heroCargo from "../../assets/hero-cargo.png";
-import servicesAirCargo from "../../assets/services-air-cargo.png";
 import { translations } from "../../config/translations";
 
 const locale = (Astro.currentLocale === "en" ? "en" : "es") as "es" | "en";
@@ -31,30 +26,34 @@ const t = translations[locale].services;
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-stretch">
       <!-- Left Image Panel -->
       <div class="lg:col-span-5">
-        <div class="rounded-2xl overflow-hidden h-full min-h-[300px] lg:min-h-[450px] relative border border-border/50 bg-muted group shadow-md">
-          <Image
-            src={servicesDock}
-            alt="Warehouse smart storage solutions"
+        <div class="rounded-2xl overflow-hidden h-full min-h-150 relative border border-border/50 bg-muted group shadow-md">
+          <img
+            src="/assets-oleomac/img7.avif"
+            alt="Análisis y reparación de componentes oleohidráulicos"
             class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-100 service-image-panel"
             data-image-index="0"
+            loading="lazy"
           />
-          <Image
-            src={galleryTruck}
-            alt="Land transportation ensures reliable delivery"
+          <img
+            src="/assets-oleomac/img8.avif"
+            alt="Montajes oleohidráulicos industriales"
             class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-0 service-image-panel"
             data-image-index="1"
+            loading="lazy"
           />
-          <Image
-            src={heroCargo}
-            alt="Sea transportation supports global cargo flow"
+          <img
+            src="/assets-oleomac/img9.avif"
+            alt="Construcción y diseño de centrales hidráulicas"
             class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-0 service-image-panel"
             data-image-index="2"
+            loading="lazy"
           />
-          <Image
-            src={servicesAirCargo}
-            alt="Air transport offers fast freight service"
+          <img
+            src="/assets-oleomac/img10.avif"
+            alt="Importación de componentes y repuestos oleohidráulicos"
             class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-0 service-image-panel"
             data-image-index="3"
+            loading="lazy"
           />
           <div class="absolute inset-0 bg-black/10 dark:bg-black/20 z-10 pointer-events-none"></div>
         </div>
@@ -62,29 +61,46 @@ const t = translations[locale].services;
 
       <!-- Right Accordion List -->
       <div class="lg:col-span-7 flex flex-col justify-between space-y-6">
-        <div class="space-y-4 animate-reveal-items">
-          {t.servicesList.map((serviceTitle, idx) => {
+        <div class="space-y-4 animate-reveal-items lg:min-h-[500px]">
+          {t.servicesList.map((service, idx) => {
             const isFirst = idx === 0;
             return (
               <div
                 data-service-item
                 data-service-index={idx}
                 class={isFirst
-                  ? "p-6 rounded-2xl bg-foreground border border-foreground flex items-center justify-between shadow-lg transition-all duration-300 group cursor-pointer"
-                  : "p-6 rounded-2xl bg-muted border border-border flex items-center justify-between transition-all duration-300 hover:border-border group cursor-pointer"
+                  ? "p-6 rounded-2xl bg-foreground border border-foreground flex flex-col justify-start shadow-lg transition-all duration-300 group cursor-pointer"
+                  : "p-6 rounded-2xl bg-muted border border-border flex flex-col justify-start transition-all duration-300 hover:border-border group cursor-pointer"
                 }
               >
-                <div class="flex items-center gap-4">
-                  <span class={isFirst ? "service-num font-mono text-xs text-muted-foreground" : "service-num font-mono text-xs text-muted-foreground"}>(0{idx + 1})</span>
-                  <span class={isFirst ? "service-title text-base font-bold text-background" : "service-title text-base font-bold text-foreground"}>{serviceTitle}</span>
+                <div class="flex items-center justify-between w-full">
+                  <div class="flex items-center gap-4">
+                    <span class="service-num font-mono text-xs text-muted-foreground">(0{idx + 1})</span>
+                    <span class={isFirst ? "service-title text-base font-bold text-background" : "service-title text-base font-bold text-foreground"}>{service.title}</span>
+                  </div>
+                  <div class={isFirst
+                    ? "service-arrow h-8 w-8 rounded-full bg-background flex items-center justify-center text-foreground transition-all rotate-90"
+                    : "service-arrow h-8 w-8 rounded-full border border-border flex items-center justify-center text-muted-foreground group-hover:text-foreground group-hover:border-foreground transition-all"
+                  }>
+                    <svg class="w-4 h-4 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width={isFirst ? "2.5" : "2"}>
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
                 </div>
+
+                <!-- Collapsible Details -->
                 <div class={isFirst
-                  ? "service-arrow h-8 w-8 rounded-full bg-background flex items-center justify-center text-foreground transition-all"
-                  : "service-arrow h-8 w-8 rounded-full border border-border flex items-center justify-center text-muted-foreground group-hover:text-foreground group-hover:border-foreground transition-all"
+                  ? "service-collapse grid grid-rows-[1fr] opacity-100 transition-[grid-template-rows,opacity] duration-300 ease-in-out"
+                  : "service-collapse grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity] duration-300 ease-in-out"
                 }>
-                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width={isFirst ? "2.5" : "2"}>
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                  </svg>
+                  <div class="overflow-hidden">
+                    <p class={isFirst
+                      ? "service-desc text-sm leading-relaxed text-background/80 mt-4 animate-fadeIn"
+                      : "service-desc text-sm leading-relaxed text-muted-foreground mt-0"
+                    }>
+                      {service.desc}
+                    </p>
+                  </div>
                 </div>
               </div>
             );
@@ -117,19 +133,33 @@ const t = translations[locale].services;
       const titleSpan = item.querySelector('.service-title');
       const arrowCircle = item.querySelector('.service-arrow');
       const arrowSvg = item.querySelector('.service-arrow svg');
+      const collapseDiv = item.querySelector('.service-collapse');
+      const descPara = item.querySelector('.service-desc');
 
       if (isCurrent) {
-        item.className = "p-6 rounded-2xl bg-foreground border border-foreground flex items-center justify-between shadow-lg transition-all duration-300 group cursor-pointer";
+        item.className = "p-6 rounded-2xl bg-foreground border border-foreground flex flex-col justify-start shadow-lg transition-all duration-300 group cursor-pointer";
         if (numSpan) numSpan.className = "service-num font-mono text-xs text-muted-foreground";
         if (titleSpan) titleSpan.className = "service-title text-base font-bold text-background";
-        if (arrowCircle) arrowCircle.className = "service-arrow h-8 w-8 rounded-full bg-background flex items-center justify-center text-foreground transition-all";
+        if (arrowCircle) arrowCircle.className = "service-arrow h-8 w-8 rounded-full bg-background flex items-center justify-center text-foreground transition-all rotate-90";
         if (arrowSvg) arrowSvg.setAttribute('stroke-width', '2.5');
+        if (collapseDiv) {
+          collapseDiv.className = "service-collapse grid grid-rows-[1fr] opacity-100 transition-[grid-template-rows,opacity] duration-300 ease-in-out";
+        }
+        if (descPara) {
+          descPara.className = "service-desc text-sm leading-relaxed text-background/80 mt-4";
+        }
       } else {
-        item.className = "p-6 rounded-2xl bg-muted border border-border flex items-center justify-between transition-all duration-300 hover:border-border group cursor-pointer";
+        item.className = "p-6 rounded-2xl bg-muted border border-border flex flex-col justify-start transition-all duration-300 hover:border-border group cursor-pointer";
         if (numSpan) numSpan.className = "service-num font-mono text-xs text-muted-foreground";
         if (titleSpan) titleSpan.className = "service-title text-base font-bold text-foreground";
         if (arrowCircle) arrowCircle.className = "service-arrow h-8 w-8 rounded-full border border-border flex items-center justify-center text-muted-foreground group-hover:text-foreground group-hover:border-foreground transition-all";
         if (arrowSvg) arrowSvg.setAttribute('stroke-width', '2');
+        if (collapseDiv) {
+          collapseDiv.className = "service-collapse grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity] duration-300 ease-in-out";
+        }
+        if (descPara) {
+          descPara.className = "service-desc text-sm leading-relaxed text-muted-foreground mt-0";
+        }
       }
     });
 

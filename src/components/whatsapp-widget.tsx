@@ -101,14 +101,14 @@ export function WhatsAppWidget({ locale = 'es' }: WhatsAppWidgetProps) {
   return (
     <div
       ref={widgetRef}
-      className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end"
+      className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end pointer-events-none"
     >
       {/* ── Popup panel ── */}
       <div
         className={cn(
-          'mb-4 w-[calc(100vw-2rem)] sm:w-80 max-w-80 overflow-hidden rounded-2xl border border-border bg-card shadow-2xl transition-all duration-300 origin-bottom-right',
+          'absolute bottom-full mb-4 right-0 w-[calc(100vw-2rem)] sm:w-80 max-w-80 overflow-hidden rounded-2xl border border-border bg-card shadow-2xl transition-all duration-300 origin-bottom-right',
           isOpen
-            ? 'scale-100 opacity-100 translate-y-0'
+            ? 'scale-100 opacity-100 translate-y-0 pointer-events-auto'
             : 'pointer-events-none scale-95 opacity-0 translate-y-2'
         )}
         role="dialog"
@@ -166,12 +166,12 @@ export function WhatsAppWidget({ locale = 'es' }: WhatsAppWidgetProps) {
       </div>
 
       {/* ── Trigger row: tooltip + button ── */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 pointer-events-none">
         {/* Hover tooltip (desktop only) */}
         {!isOpen && (
           <div
             className={cn(
-              'hidden sm:flex flex-col items-end rounded-xl border border-border bg-popover px-4 py-2.5 shadow-lg transition-all duration-300',
+              'hidden sm:flex flex-col items-end rounded-xl border border-border bg-popover px-4 py-2.5 shadow-lg transition-all duration-300 pointer-events-auto',
               isHovered ? 'translate-x-0 opacity-100' : 'translate-x-4 opacity-0 pointer-events-none'
             )}
           >
@@ -185,7 +185,7 @@ export function WhatsAppWidget({ locale = 'es' }: WhatsAppWidgetProps) {
           onClick={() => setIsOpen(prev => !prev)}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          className="relative flex size-12 sm:size-14 shrink-0 items-center justify-center rounded-full bg-[#25D366] hover:bg-[#20b858] text-white shadow-[0_0_20px_rgba(37,211,102,0.35)] transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer border-0 outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2"
+          className="relative flex size-12 sm:size-14 shrink-0 items-center justify-center rounded-full bg-[#25D366] hover:bg-[#20b858] text-white shadow-[0_0_20px_rgba(37,211,102,0.35)] transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer border-0 outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2 pointer-events-auto"
           aria-label={isOpen ? t.ariaClose : t.ariaOpen}
           aria-expanded={isOpen}
           aria-haspopup="dialog"

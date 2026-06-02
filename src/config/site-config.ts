@@ -114,32 +114,32 @@ export interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  canonicalUrl: "https://iteloogs.co",
+  canonicalUrl: "https://oleomac-anf.cl",
   i18n: {
     defaultLocale: "es-CL",
     locales: ["es-CL", "en"],
   },
   seo: {
-    defaultTitle: "Iteloogs | Moving Goods Smarter Across Every Destination",
+    defaultTitle: "Oleomac E.I.R.L. | Servicios y Montajes Oleohidráulicos en Antofagasta",
     defaultDescription:
-      "We are a logistics company committed to delivering speed, accuracy, and accountability across every shipment. With over a decade of expertise, we optimize global supply chains through smart, scalable, and sustainable solutions.",
-    author: "Oxen Start",
+      "Empresa líder en el mercado oleohidráulico de Antofagasta. Especialistas en reparación de componentes, montajes de piping, microfiltrado y construcción de centrales oleohidráulicas.",
+    author: "Oleomac E.I.R.L.",
     defaultOgImage: "/og-image.jpg",
     ogType: "website",
   },
   form: {
     provider: "resend",
-    from: "hello@iteloogs.co",
-    subjectPrefix: "[Contact Web] ",
+    from: "contacto@oleomac-anf.cl",
+    subjectPrefix: "[Contacto Web Oleomac] ",
     messages: {
       success:
-        "Thank you for contacting us! Your message has been received and we will respond to you shortly.",
+        "¡Gracias por contactarnos! Su mensaje ha sido recibido con éxito y nos pondremos en contacto a la brevedad.",
       error:
-        "We couldn't send your message right now. Please try again or reach out directly.",
+        "No pudimos enviar su mensaje en este momento. Por favor, intente nuevamente o contáctenos vía WhatsApp.",
     },
   },
   analytics: {
-    googleAnalyticsId: "G-DEMO123456",
-    metaPixelId: "1234567890",
+    googleAnalyticsId: "",
+    metaPixelId: "",
   },
 };

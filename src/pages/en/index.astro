@@ -92,8 +92,6 @@ const tContact = translations[locale].contact;
               <span class="text-muted-foreground font-mono text-xs uppercase tracking-widest font-semibold block">{tContact.businessHours}</span>
               <p class="text-base text-muted-foreground leading-normal">
                 {tContact.weekday}: {businessInfo.hours.weekday}<br />
-                {tContact.saturday}: {businessInfo.hours.saturday ?? "Closed"}<br />
-                {tContact.sunday}: {!businessInfo.hours.sunday || businessInfo.hours.sunday === "Closed" ? "Closed" : businessInfo.hours.sunday}
               </p>
             </div>
           </div>

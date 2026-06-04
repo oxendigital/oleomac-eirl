@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev
 
 jobs:
   deploy:
@@ -30,13 +31,13 @@ jobs:
       - name: Compilar sitio Astro
         run: pnpm build
         env:
-          # Variable de entorno de compilación para apuntar al Worker independiente en producción.
-          # Debe configurarse en los Secrets o variables del repositorio de GitHub.
-          PUBLIC_CONTACT_API_URL: ${{ secrets.PUBLIC_CONTACT_API_URL }}
+          # Inyecta la API de producción en main, y la de staging para dev u otras ramas de pruebas
+          PUBLIC_CONTACT_API_URL: ${{ github.ref_name == 'main' && secrets.PUBLIC_CONTACT_API_URL || secrets.PUBLIC_CONTACT_API_URL_STAGING }}
 
       - name: Desplegar a Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # wrangler detectará automáticamente si es main (producción) o dev (staging/preview)
           command: pages deploy dist --project-name=oleomac-eirl

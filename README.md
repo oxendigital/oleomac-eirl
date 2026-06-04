@@ -1,22 +1,22 @@
 # Oxen Start
 
-Template de sitio web corporativo para PYMEs B2B chilenas. Pensado para desplegarse rápido, personalizarse desde archivos de configuración centralizados, y escalar a medida que el negocio crece.
+Template de sitio web corporativo de alto rendimiento para PYMEs B2B chilenas. Pensado para desplegarse rápido, personalizarse desde archivos de configuración centralizados, y escalar de forma 100% gratuita.
 
-Construido sobre **Astro 6 + Cloudflare Workers**. Sin base de datos, sin servidor propio. Todo vive en el plan gratuito de Cloudflare.
+El sitio web está compilado de forma **100% estática (Astro 6 en modo static)** y desplegado en Cloudflare Pages, lo que garantiza **costo $0, ancho de banda ilimitado y cero consumo de minutos de procesamiento de Workers por visitas**. El procesamiento dinámico del formulario de contacto se delega de forma externa y segura a una API centralizada en Cloudflare Workers (`oxen-forms-api`).
 
 ---
 
 ## Stack
 
-| Capa | Tecnología |
-|---|---|
-| Framework | Astro 6 (SSR) |
-| UI | React 19 + shadcn/ui (Tailwind v4) |
-| Deploy | Cloudflare Workers (adapter oficial) |
-| Formulario | React Hook Form + Zod + Resend v6 |
-| Estilos | Tailwind v4 con variables semánticas CSS |
-| i18n | Astro i18n nativo (ES-CL + EN, extensible) |
-| SEO/AEO | Schema.org @graph (LocalBusiness + WebSite + FAQPage) |
+| Capa | Tecnología | Características |
+|---|---|---|
+| Framework | Astro 6 (Estático Puro) | Cero ejecución de JS en servidor durante visitas ordinarias. |
+| UI | React 19 + shadcn/ui (Tailwind v4) | Carga reactiva de componentes dinámicos en el cliente. |
+| Deploy | Cloudflare Pages (Assets Estáticos) | Hosting gratis, ilimitado, veloz y seguro a través de CDN. |
+| Formulario | React Hook Form + Zod + API Externa | Validación local y envío AJAX seguro a la API de la agencia. |
+| Estilos | Tailwind v4 con variables CSS | Fácil personalización de marca a través de CSS nativo. |
+| i18n | Astro i18n nativo (ES-CL + EN) | Soporte multiidioma basado en carpetas y routing estático. |
+| SEO/AEO | Schema.org @graph | JSON-LD para LocalBusiness, WebSite y FAQPage (motores IA). |
 
 ---
 
@@ -25,46 +25,45 @@ Construido sobre **Astro 6 + Cloudflare Workers**. Sin base de datos, sin servid
 ```
 src/
 ├── config/
-│   ├── business-info.ts   ← TODO lo del cliente va aquí
+│   ├── business-info.ts   ← Datos públicos del cliente (RUT, WhatsApp, dirección)
 │   ├── site-config.ts     ← URL canónica, i18n, analytics
 │   └── translations.ts    ← Textos por idioma (contenido + SEO)
 │
 ├── layouts/
-│   └── base-layout.astro  ← HTML base, SEO, Schema.org, analytics
+│   └── base-layout.astro  ← Estructura HTML común, SEO, Schema.org, analytics
 │
 ├── pages/
-│   ├── index.astro        ← Página principal (ES)
-│   ├── 404.astro
-│   ├── api/contact.ts     ← Endpoint Worker para el formulario
+│   ├── index.astro        ← Página principal (ES-CL)
+│   ├── 404.astro          ← Error 404 estático
 │   └── en/
 │       ├── index.astro    ← Página principal (EN)
-│       └── 404.astro
+│       └── 404.astro      ← Error 404 (EN)
 │
 ├── components/
-│   ├── sections/          ← Secciones modulares de la landing
+│   ├── sections/          ← Secciones de la landing
 │   │   ├── navbar.astro
 │   │   ├── hero.astro
-│   │   ├── client-logos.astro   ← Se oculta si no hay clientes
+│   │   ├── client-logos.astro
 │   │   ├── about.astro
 │   │   ├── process.astro
 │   │   ├── services.astro
 │   │   ├── gallery.astro
-│   │   ├── testimonials.astro   ← Se oculta si no hay testimonios
+│   │   ├── testimonials.astro
 │   │   ├── team.astro
 │   │   ├── cta.astro
 │   │   └── footer.astro
 │   ├── forms/
-│   │   └── contact-form.tsx
+│   │   └── contact-form.tsx  ← Formulario React que envía el post a la API externa
 │   └── whatsapp-widget.tsx
 │
-└── styles/global.css      ← Variables de tema (colores, tipografía)
+└── styles/global.css      ← Variables de tema (colores de la marca)
 ```
 
 ---
 
-## Checklist de despliegue para un nuevo cliente
+## Checklist de onboarding para un nuevo cliente
 
-### 1. Clonar e instalar
+### 1. Clonar e instalar dependencias
 
 ```bash
 git clone <url-repo> nombre-cliente
@@ -72,11 +71,9 @@ cd nombre-cliente
 pnpm install
 ```
 
-### 2. Configurar el cliente — `src/config/business-info.ts`
+### 2. Configurar los datos de la empresa — `src/config/business-info.ts`
 
-Este es el único archivo que el técnico de onboarding necesita completar para la mayoría de los clientes. Todo el sitio se alimenta desde aquí.
-
-#### Campos obligatorios
+Completa la información pública del negocio. El sitio web se inyectará de estos datos dinámicamente y generará el marcado enriquecido de Google (Schema.org).
 
 | Campo | Descripción | Ejemplo |
 |---|---|---|
@@ -84,234 +81,97 @@ Este es el único archivo que el técnico de onboarding necesita completar para 
 | `brand.legalName` | Razón social | `"Kutral Ltda."` |
 | `brand.rut` | RUT empresa | `"76.543.210-K"` |
 | `brand.tagline` | Eslogan corto | `"Calidez en el norte"` |
-| `brand.description` | Descripción larga de la empresa | — |
-| `brand.shortDescription` | Descripción corta (footer, widget) | — |
-| `contact.email` | Email público | `"contacto@kutral.cl"` |
-| `contact.phone` | Teléfono formateado | `"+56 9 8765 4321"` |
-| `contact.whatsapp` | Número WhatsApp internacional | `"+56987654321"` |
-| `contact.whatsappMessage` | Mensaje preescrito del widget | — |
-| `contact.formDestinationEmail` | Email que recibe leads del formulario | `"ventas@kutral.cl"` |
+| `contact.email` | Email público mostrado en la web | `"contacto@kutral.cl"` |
+| `contact.phone` | Teléfono formateado visible | `"+56 9 8765 4321"` |
+| `contact.whatsapp` | WhatsApp internacional | `"+56987654321"` |
 | `location.address` | Dirección física | `"Av. Grecia 1450, Of. 402"` |
 | `location.city` | Ciudad o comuna | `"Antofagasta"` |
 | `location.region` | Región | `"Región de Antofagasta"` |
-| `hours.weekday` | Horario Lun-Vie | `"09:00 a 18:30"` |
 
-#### Campos opcionales (activan funcionalidades automáticamente)
+*Nota: Los campos opcionales como `location.mapEmbedUrl`, `clients[]`, `testimonials[]` y `certifications[]` activan o desactivan secciones de la landing de manera automática.*
 
-| Campo | Efecto al completar |
-|---|---|
-| `location.mapEmbedUrl` | Muestra mapa Google Maps en la sección de contacto |
-| `location.mapDirectionsUrl` | Agrega link "Ver en Google Maps" |
-| `hours.saturday` / `hours.sunday` | Muestra esos horarios en contacto y footer |
-| `socials.linkedin/instagram/facebook/youtube/tiktok` | Aparecen en footer y donde corresponda |
-| `clients[]` | Activa la franja "Empresas que nos eligen" bajo el Hero |
-| `testimonials[]` | Activa la sección de testimonios (desaparece si está vacío) |
-| `certifications[]` | Muestra badges de certificaciones en la sección About |
-| `whatsappContacts[]` | Multi-contacto en el widget de WhatsApp (por defecto usa `contact.whatsapp`) |
-| `team[]` | Reemplaza equipo de demo con el equipo real del cliente |
-| `gallery[]` | Reemplaza galería de demo con imágenes reales |
-| `hiring` | `true` muestra tarjeta "Únete al equipo" en la sección Team |
-| `seo.geo` | Coordenadas GPS → mejora Local SEO (schema GeoCoordinates) |
-| `seo.priceRange` | Rango de precios → aparece en schema LocalBusiness |
-| `seo.areaServed[]` | Zonas de cobertura → schema areaServed |
-| `seo.faq[]` | Preguntas frecuentes → schema FAQPage (AEO para motores IA) |
+### 3. Configuración del Sitio y Dominio — `src/config/site-config.ts`
 
-### 3. Configuración técnica — `src/config/site-config.ts`
+Configura la URL definitiva del proyecto (canónica) y los idiomas activos.
 
 ```ts
 export const siteConfig: SiteConfig = {
-  canonicalUrl: "https://www.nombrecliente.cl",  // URL final del sitio
+  canonicalUrl: "https://www.nombrecliente.cl",  // URL de producción del cliente
   i18n: {
     defaultLocale: "es-CL",
-    locales: ["es-CL", "en"],   // Quitar "en" si el cliente no necesita inglés
+    locales: ["es-CL", "en"], // Mantener solo los idiomas requeridos
   },
   analytics: {
-    googleAnalyticsId: "G-XXXXXXXXXX",  // Opcional
-    metaPixelId: "123456789",           // Opcional
+    googleAnalyticsId: "G-XXXXXXXXXX",  // Dejar vacío si no se usa
+    metaPixelId: "",
   },
-  // ...
 }
 ```
 
-### 4. Textos y SEO por idioma — `src/config/translations.ts`
+### 4. Textos de la Web y Metadatos de SEO — `src/config/translations.ts`
 
-Cada idioma en `translations` tiene una sección `seo` con título, descripción y keywords específicos para ese mercado. **Actualizar siempre antes de lanzar.**
+Actualiza los textos de cada sección y el SEO (título, descripción y keywords del buscador) por cada idioma activo.
 
-```ts
-es: {
-  seo: {
-    title: "Nombre Cliente | Servicio principal en Ciudad, Chile",
-    description: "Descripción de 150-160 caracteres...",
-    keywords: "keyword1, keyword2, ciudad, Chile",
-  },
-  // ...
-}
-```
+### 5. Configurar el nombre del proyecto estático — `wrangler.jsonc`
 
-Los textos de cada sección (Hero, About, Services, etc.) también viven aquí, permitiendo adaptar el tono y propuesta de valor sin tocar componentes.
+Modifica el identificador del proyecto estático en el archivo de la raíz:
 
-### 5. Configurar Cloudflare — `wrangler.jsonc`
-
-```jsonc
+```json
 {
-  "name": "oxen-kutral-climatizacion",   // slug único por cliente
-  // ...
+  "name": "nombre-cliente-estatico",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
 }
 ```
-
-### 6. Variables de entorno
-
-```bash
-cp .env.example .env
-```
-
-Completar `RESEND_API_KEY` con la clave de Resend. En Cloudflare Pages, agregar la variable en **Settings → Environment variables** (para Production y Preview).
-
-### 7. Verificar localmente
-
-```bash
-pnpm dev
-```
-
-- `http://localhost:4321` — versión español
-- `http://localhost:4321/en` — versión inglés (si está habilitado)
-- Enviar el formulario de contacto y confirmar que llega el email
-- Verificar que el widget de WhatsApp abre con el mensaje correcto
-
-### 8. Build y deploy
-
-```bash
-pnpm build                           # Compilar
-npx wrangler pages deploy dist       # Deploy directo a Cloudflare
-```
-
-O simplemente push a la rama conectada a Cloudflare Pages para CI/CD automático.
 
 ---
 
-## Personalización del tema
+## Integración de Formularios de Contacto (Seguro y Reutilizable)
 
-Todos los colores del sitio están definidos como variables CSS en `src/styles/global.css`. Los componentes usan clases semánticas de Tailwind (`bg-background`, `text-foreground`, `bg-primary`, etc.) que apuntan a esas variables. **Cambiar el tema no requiere tocar ningún componente.**
+El formulario de contacto de este proyecto se comunica de forma segura mediante HTTPS POST con la API centralizada de la agencia (`oxen-forms-api`), alojada de forma independiente en Cloudflare Workers.
+
+### Configuración del Frontend:
+1. En [src/components/forms/contact-form.tsx](file:///home/melendezdev/Dev/personal/oleomac-eirl/src/components/forms/contact-form.tsx#L50) se envía la propiedad `clientId: "oleomac"` (o el identificador correspondiente de tu nuevo cliente).
+2. Durante el desarrollo local, si no se detecta la variable `PUBLIC_CONTACT_API_URL`, el frontend intentará llamar a `/api/contact` como fallback.
+3. En producción, el formulario apuntará a la URL de tu API centralizada cargada desde la variable de compilación.
+
+> [!NOTE]
+> **¿Cómo funciona esto para futuros clientes? (Escalabilidad de Onboarding)**
+> No necesitas crear ni configurar una API de correo para cada nuevo sitio. La API es única y centralizada:
+> 1. **En la API centralizada (`oxen-forms-api`):** Agrega la configuración del cliente (su correo destino, logo, color corporativo y dominio CORS autorizado) en `clients.ts` y redespliega el Worker (1 minuto).
+> 2. **En el frontend de este repositorio:** Cambia la propiedad `clientId` en el componente `contact-form.tsx` por el nuevo identificador creado (ej: `"kutral"`).
+> 3. **En GitHub:** Crea el repositorio del cliente y en sus secretos añade las 3 variables. El `ACCOUNT_ID`, `API_TOKEN` y la `PUBLIC_CONTACT_API_URL` serán exactamente los mismos para todas las webs de tus clientes, facilitando una configuración en serie.
+
+---
+
+## Flujo de Despliegue Automatizado (CI/CD) sin Costos
+
+Para evitar consumir la cuota de **500 builds al mes gratis** de Cloudflare Pages, el proyecto incluye un flujo de automatización con **GitHub Actions** en `.github/workflows/deploy.yml`. Las compilaciones se realizan en GitHub y el resultado compilado se publica directo a Cloudflare en segundos.
+
+### Configuración en el Repositorio de GitHub:
+Antes de realizar tu primer `git push`, ve a **Settings > Secrets and variables > Actions > Secrets** en el repositorio del cliente e ingresa los siguientes secretos:
+
+1. **`CLOUDFLARE_ACCOUNT_ID`:** El ID de tu cuenta de Cloudflare (se obtiene en la sección Workers & Pages de tu panel de Cloudflare).
+2. **`CLOUDFLARE_API_TOKEN`:** Un token de acceso de Cloudflare creado con permisos para editar proyectos de Cloudflare Pages (se obtiene en *My Profile > API Tokens > API Tokens* en Cloudflare).
+3. **`PUBLIC_CONTACT_API_URL`:** La URL de producción de tu API de formularios centralizada (ej. `https://oxen-forms-api.tu-subdominio.workers.dev`). Esta variable se inyecta en el build estático para que el formulario sepa a dónde enviar los datos.
+
+Una vez configurados los secretos, cada cambio que subas a la rama `main` compilará y se desplegará de forma 100% automatizada e ilimitada.
+
+---
+
+## Personalización del Tema de Colores
+
+Para cambiar la paleta de colores del cliente no necesitas tocar componentes. Edita las variables CSS semánticas en `src/styles/global.css`:
 
 ```css
-/* src/styles/global.css */
 :root {
-  --background: oklch(1 0 0);           /* Blanco — fondo general */
-  --foreground: oklch(0.145 0 0);       /* Negro — texto principal */
-  --primary: oklch(0.42 0.15 250);      /* Azul — color de acento */
-  --muted: oklch(0.97 0 0);             /* Gris claro — fondos alternos */
-  /* ... */
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --primary: oklch(0.68 0.12 250);
-  /* ... */
+  --background: oklch(1 0 0);           /* Fondo general (blanco) */
+  --foreground: oklch(0.145 0 0);       /* Texto principal */
+  --primary: oklch(0.645 0.246 85.08);   /* Naranja/Amarillo corporativo del cliente */
+  --muted: oklch(0.97 0 0);             /* Fondos secundarios (gris) */
 }
 ```
 
-Para cambiar el color principal del cliente: editar `--primary` en `:root` y `.dark`.
-
----
-
-## Agregar un nuevo idioma
-
-1. Añadir el locale en `site-config.ts`:
-   ```ts
-   locales: ["es-CL", "en", "pt-BR"]
-   ```
-
-2. Agregar la clave en `translations.ts` (TypeScript fallará en build si falta alguna):
-   ```ts
-   export const translations: Record<"es" | "en" | "pt", Translations> = {
-     "pt": { nav: {...}, hero: {...}, seo: {...}, ... }
-   }
-   ```
-
-3. Crear `src/pages/pt/index.astro` copiando `src/pages/en/index.astro`.
-
-El selector de idiomas en el navbar se actualiza automáticamente. Los hreflang y og:locale:alternate también.
-
----
-
-## Secciones disponibles
-
-El orden actual del funnel de conversión:
-
-| # | Sección | Archivo | Se oculta automáticamente si... |
-|---|---|---|---|
-| 1 | Navbar | `navbar.astro` | — |
-| 2 | Hero | `hero.astro` | — |
-| 3 | Logos de clientes | `client-logos.astro` | `businessInfo.clients` está vacío |
-| 4 | About + Certificaciones | `about.astro` | Certificaciones se ocultan si el array está vacío |
-| 5 | Proceso / Cómo trabajamos | `process.astro` | — (textos en translations) |
-| 6 | Servicios | `services.astro` | — |
-| 7 | Galería | `gallery.astro` | — |
-| 8 | Testimonios | `testimonials.astro` | `businessInfo.testimonials` está vacío |
-| 9 | Equipo | `team.astro` | Tarjeta "Join" se oculta si `hiring: false` |
-| 10 | CTA | `cta.astro` | — |
-| 11 | Contacto + Mapa | `index.astro` | Mapa se oculta si no hay `mapEmbedUrl` |
-| 12 | Footer | `footer.astro` | — |
-
-Para **reordenar secciones**, cambiar el orden de los imports en `src/pages/index.astro` y `src/pages/en/index.astro`.
-
-Para **ocultar una sección** por completo, eliminar su import y uso en ambas páginas.
-
----
-
-## SEO y AEO
-
-El `base-layout.astro` inyecta automáticamente en cada página:
-
-- `<title>` y `<meta description>` por idioma (desde `translations[locale].seo`)
-- `<meta keywords>` por idioma
-- `<link rel="canonical">`
-- `<link rel="alternate" hreflang>` para cada locale registrado + `x-default`
-- `og:locale` y `og:locale:alternate` dinámicos
-- `<meta name="robots" content="index, follow, max-image-preview:large...">`
-- Schema.org `@graph` con:
-  - `LocalBusiness` (dirección, horarios, geo, teléfono, areaServed, priceRange)
-  - `WebSite`
-  - `FAQPage` — generado desde `businessInfo.seo.faq[]` (AEO: optimizado para motores de IA como ChatGPT, Perplexity, Google AI)
-
-Para páginas internas que no deban indexarse (ej. thank-you):
-```astro
-<BaseLayout noindex={true}>
-```
-
----
-
-## Formulario de contacto
-
-El formulario usa **Resend** para el envío. El endpoint en `src/pages/api/contact.ts` corre como Cloudflare Worker y:
-
-1. Valida el cuerpo con Zod (mismo schema que el frontend)
-2. Revisa el campo honeypot anti-spam
-3. Envía el email al `contact.formDestinationEmail` definido en `business-info.ts`
-
-Si el cliente quiere cambiar el email de destino sin tocar código: solo actualizar `contact.formDestinationEmail` en `business-info.ts`.
-
----
-
-## Dependencias clave
-
-| Paquete | Versión | Uso |
-|---|---|---|
-| `astro` | 6.x | Framework base |
-| `@astrojs/cloudflare` | 13.x | Adapter SSR para Workers |
-| `tailwindcss` | 4.x | Estilos utilitarios |
-| `shadcn` | 4.x | Componentes UI (Button, Input, Form, etc.) |
-| `react` | 19.x | Componentes interactivos (formulario, widget) |
-| `react-hook-form` | 7.x | Manejo de formularios |
-| `zod` | 4.x | Validación de schema |
-| `resend` | 6.x | Envío de emails |
-| `sonner` | 2.x | Notificaciones toast |
-
----
-
-## Requisitos del entorno
-
-- **Node.js** ≥ 22.12.0
-- **pnpm** (gestor de paquetes)
-- Cuenta **Cloudflare** (plan gratuito suficiente)
-- Cuenta **Resend** (plan gratuito: 3.000 emails/mes)
+Edita la variable `--primary` tanto en `:root` como en la clase `.dark` (modo oscuro) para adaptarla a la identidad corporativa del cliente.

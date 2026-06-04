@@ -129,7 +129,7 @@ export const siteConfig: SiteConfig = {
   },
   form: {
     provider: "resend",
-    from: "contacto@oleomac-anf.cl",
+    from: "no-reply@oxendigital.com",
     subjectPrefix: "[Contacto Web Oleomac] ",
     messages: {
       success:

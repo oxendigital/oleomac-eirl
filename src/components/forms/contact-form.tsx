@@ -43,10 +43,14 @@ export default function ContactForm({ locale = "es" }: ContactFormProps) {
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
     try {
-      const response = await fetch("/api/contact", {
+      const endpoint = import.meta.env.PUBLIC_CONTACT_API_URL || "/api/contact";
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          clientId: "oleomac" // Identificador único de este cliente en el Worker centralizado
+        }),
       });
 
       const result = await response.json();

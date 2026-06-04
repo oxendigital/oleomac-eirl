@@ -79,7 +79,7 @@ const localBusinessSchema = {
   "name": businessInfo.brand.name,
   "legalName": businessInfo.brand.legalName,
   "taxID": businessInfo.brand.rut,
-  "description": businessInfo.brand.description,
+  "description": tSeo.description || businessInfo.brand.description,
   "url": siteConfig.canonicalUrl,
   "logo": {
     "@type": "ImageObject",
@@ -141,11 +141,12 @@ const webSiteSchema = {
 // FAQPage schema — critical for AEO (Answer Engine Optimization)
 // AI answer engines (ChatGPT, Perplexity, Google AI, etc.) parse this schema
 // to surface your business answers directly in AI-generated responses.
-const faqSchema = businessInfo.seo?.faq?.length
+const faqs = tSeo.faq || businessInfo.seo?.faq || [];
+const faqSchema = faqs.length
   ? {
       "@type": "FAQPage",
       "@id": `${siteConfig.canonicalUrl}/#faq`,
-      "mainEntity": businessInfo.seo.faq.map(item => ({
+      "mainEntity": faqs.map(item => ({
         "@type": "Question",
         "name": item.question,
         "acceptedAnswer": {

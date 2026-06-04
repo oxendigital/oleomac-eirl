@@ -22,7 +22,7 @@ const currentYear = new Date().getFullYear();
           <img src={businessInfo.brand.url} alt={businessInfo.brand.name} class="h-14 w-auto object-contain" />
         </a>
         <p class="text-muted-foreground/80 leading-relaxed text-sm max-w-xs">
-          {businessInfo.brand.shortDescription}
+          {t.shortDescription || businessInfo.brand.shortDescription}
         </p>
         <!-- Social Links -->
         <div class="flex items-center gap-2">

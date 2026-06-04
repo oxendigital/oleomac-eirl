@@ -16,10 +16,10 @@ import { businessInfo } from "../../config/business-info";
 const hasCustomGallery = businessInfo.gallery && businessInfo.gallery.length > 0;
 
 const normalizedSlides = hasCustomGallery
-  ? businessInfo.gallery!.map((item) => ({
+  ? businessInfo.gallery!.map((item, index) => ({
       img: item.url,
-      title: item.title,
-      desc: item.description,
+      title: t.slides[index]?.title || item.title,
+      desc: t.slides[index]?.desc || item.description,
       isAsset: false
     }))
   : [

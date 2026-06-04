@@ -14,12 +14,12 @@ const showHiring = businessInfo.hiring ?? false;
 const hasCustomTeam = businessInfo.team && businessInfo.team.length > 0;
 
 const normalizedTeam = hasCustomTeam
-  ? businessInfo.team!.map((member) => ({
+  ? businessInfo.team!.map((member, index) => ({
       name: member.name,
       img: member.imageUrl || "",
       email: member.email || "",
       linkedin: member.linkedin || "",
-      role: member.role,
+      role: t.roles?.[index] || member.role,
       isAsset: false
     }))
   : [];

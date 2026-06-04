@@ -4,7 +4,10 @@ import { translations } from "../../config/translations";
 
 const locale = (Astro.currentLocale === "en" ? "en" : "es") as "es" | "en";
 const t = translations[locale].about;
-const certifications = businessInfo.certifications ?? [];
+const certifications = (businessInfo.certifications ?? []).map((cert, index) => ({
+  name: t.certifications?.[index]?.name || cert.name,
+  issuer: t.certifications?.[index]?.issuer || cert.issuer
+}));
 
 const visionTitleParts = t.visionTitle.split(' ');
 const visionFirst = visionTitleParts[0];

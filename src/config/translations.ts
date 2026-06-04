@@ -3,7 +3,7 @@ export interface Translations {
     home: string;
     product: string;
     production: string;
-    team: string; // Cambiado de testimonials a team
+    team: string;
     contact: string;
   };
   hero: {
@@ -29,6 +29,7 @@ export interface Translations {
     missionTitle: string;
     missionHeading: string;
     missionDesc: string;
+    certifications?: { name: string; issuer?: string }[];
   };
   gallery: {
     label: string;
@@ -51,6 +52,7 @@ export interface Translations {
     joinTitle: string;
     joinDesc: string;
     openPositions: string;
+    roles?: string[];
   };
   cta: {
     label: string;
@@ -99,14 +101,13 @@ export interface Translations {
     privacy: string;
     terms: string;
     backToTop: string;
+    shortDescription?: string;
   };
   seo: {
-    /** Título completo de la página para la etiqueta <title> y og:title. */
     title: string;
-    /** Meta descripción de la página (160 caracteres idealmente). */
     description: string;
-    /** Palabras clave separadas por coma para la etiqueta <meta name="keywords">. */
     keywords: string;
+    faq?: { question: string; answer: string }[];
   };
   whatsappWidget: {
     title: string;
@@ -115,6 +116,7 @@ export interface Translations {
     chatTooltip: string;
     ariaOpen: string;
     ariaClose: string;
+    department?: string;
   };
   clientLogos: {
     label: string;
@@ -164,34 +166,62 @@ export const translations: Record<"es" | "en", Translations> = {
       missionTitle: "Nuestro Compromiso",
       missionHeading: "Soluciones reales y confiables",
       missionDesc: "Prestar servicios fiables de mantenimiento y reparación, utilizando instrumentación avanzada como contadores de partículas láser y flujómetros en línea para certificar el rendimiento de cada componente.",
+      certifications: [
+        { name: "Norma ISO 4406/99", issuer: "Certificación de Limpieza de Fluidos" },
+        { name: "ISO 8434-1 / SAE J514", issuer: "Sistemas de Montaje de Piping" }
+      ]
     },
     gallery: {
       label: "NUESTRAS OBRAS",
       slides: [
         {
           title: "Reparación y Mantención",
-          desc: "Intervención y restauración de componentes oleohidráulicos dañados.",
+          desc: "Intervención de componentes dañados y mantenciones preventivas."
         },
         {
           title: "Montajes Oleohidráulicos",
-          desc: "Instalación de líneas de conducción rígida en acero carbono e inoxidable.",
+          desc: "Montaje de líneas de conducción rígida en acero carbono e inoxidable."
         },
         {
-          title: "Fabricación de Equipos",
-          desc: "Construcción de centrales hidráulicas y equipos de microfiltrado.",
+          title: "Construcción de Equipos",
+          desc: "Fabricación de centrales hidráulicas y unidades a la medida."
         },
         {
-          title: "Análisis de Fluidos",
-          desc: "Conteo de partículas láser certificado bajo norma ISO 4406/99.",
+          title: "Análisis y Conteo Láser",
+          desc: "Análisis de fluidos con contador de partículas láser."
         },
         {
           title: "Limpieza por Flushing",
-          desc: "Limpieza interna de conductos con flujo turbulento.",
+          desc: "Limpieza interna de conductos con flujo turbulento."
         },
         {
-          title: "Componentes y Repuestos",
-          desc: "Importación de componentes especializados y venta de repuestos.",
+          title: "Importación y Repuestos",
+          desc: "Venta de componentes oleohidráulicos y repuestos multimarca."
         },
+        {
+          title: "Diagnóstico Hidráulico",
+          desc: "Evaluación técnica de parámetros y presión de fluidos en terreno."
+        },
+        {
+          title: "Banco de Pruebas",
+          desc: "Certificación de funcionamiento de cilindros y bombas hidráulicas."
+        },
+        {
+          title: "Mangueras de Alta Presión",
+          desc: "Armado, prensado y testeo de conexiones oleohidráulicas."
+        },
+        {
+          title: "Servicios en Terreno",
+          desc: "Asistencia, diagnóstico y mantenimiento hidráulico directo en faena."
+        },
+        {
+          title: "Infraestructura de Taller",
+          desc: "Taller equipado para el desarme y reparación de grandes componentes."
+        },
+        {
+          title: "Válvulas y Distribución",
+          desc: "Mantención y configuración experta de bancos de válvulas industriales."
+        }
       ],
     },
     services: {
@@ -225,6 +255,7 @@ export const translations: Record<"es" | "en", Translations> = {
       joinTitle: "Únete a nuestro equipo",
       joinDesc: "Buscamos técnicos especialistas en oleohidráulica y mecánicos de montaje para integrarse a nuestro equipo en Antofagasta.",
       openPositions: "Postular",
+      roles: ["Fundador y Jefe Operaciones", "Cargo o Rol", "Cargo o Rol"]
     },
     cta: {
       label: "SOLUCIONES OLEOHIDRÁULICAS",
@@ -273,11 +304,30 @@ export const translations: Record<"es" | "en", Translations> = {
       privacy: "Política de Privacidad",
       terms: "Términos de Servicio",
       backToTop: "[ Volver Arriba ↑ ]",
+      shortDescription: "Empresa regional especializada en servicios, mantención, montajes y construcción de equipos oleohidráulicos."
     },
     seo: {
       title: "Oleomac E.I.R.L. | Servicios, Montajes y Reparaciones Oleohidráulicas en Antofagasta",
       description: "Empresa líder en el mercado oleohidráulico de Antofagasta. Reparación de componentes, montajes de piping, microfiltrado, limpieza flushing y fabricación de centrales.",
       keywords: "oleohidraulica Antofagasta, reparacion de componentes hidraulicos, montajes oleohidraulicos, piping hidraulico, microfiltrado de fluidos, flushing hidraulico, centrales hidraulicas, repuestos hidraulicos Chile",
+      faq: [
+        {
+          question: "¿Qué servicios oleohidráulicos ofrecen?",
+          answer: "Ofrecemos análisis de fluidos con contador de partículas láser, análisis de rendimiento volumétrico de bombas y motores, microfiltrado, limpieza flushing, montaje de piping rígido en acero carbono/inoxidable, y reparación de componentes dañados."
+        },
+        {
+          question: "¿Qué tipo de equipos fabrican o construyen?",
+          answer: "Fabricamos centrales oleohidráulicas, equipos de microfiltrado, bancos de pruebas para componentes, unidades de trasvasije y unidades auxiliares de poder (A.P.U.), adaptados a los requerimientos del cliente."
+        },
+        {
+          question: "¿Dónde están ubicados y cuál es su horario?",
+          answer: "Estamos ubicados en Avenida Radomiro Tomic 7793, Antofagasta. Atendemos de Lunes a Viernes de 08:00 a 17:00 horas."
+        },
+        {
+          question: "¿Venden repuestos o componentes oleohidráulicos?",
+          answer: "Sí, realizamos importación de componentes oleohidráulicos y venta de repuestos especializados para maquinarias móviles e industriales."
+        }
+      ]
     },
     whatsappWidget: {
       title: "WhatsApp Oleomac",
@@ -286,6 +336,7 @@ export const translations: Record<"es" | "en", Translations> = {
       chatTooltip: "Chatea con nosotros",
       ariaOpen: "Abrir chat de WhatsApp",
       ariaClose: "Cerrar chat",
+      department: "Cotizaciones y Servicios"
     },
     clientLogos: {
       label: "Empresas que confían en nosotros",
@@ -297,20 +348,20 @@ export const translations: Record<"es" | "en", Translations> = {
       steps: [
         {
           title: "Recepción y Diagnóstico",
-          desc: "Evaluamos el desgaste de componentes o la contaminación del fluido utilizando instrumentos de última generación.",
+          desc: "Evaluamos el desgaste de componentes o la contaminación del fluido utilizando instrumentos de última generación."
         },
         {
           title: "Propuesta Técnica",
-          desc: "Diseñamos la solución óptima de reparación, montaje o fabricación con presupuestos y plazos claros.",
+          desc: "Diseñamos la solución óptima de reparación, montaje o fabricación con presupuestos y plazos claros."
         },
         {
           title: "Ejecución y Filtrado",
-          desc: "Realizamos el trabajo mecánico o montaje y aplicamos flushing/microfiltrado para garantizar la pureza del sistema.",
+          desc: "Realizamos el trabajo mecánico o montaje y aplicamos flushing/microfiltrado para garantizar la pureza del sistema."
         },
         {
           title: "Certificación y Entrega",
-          desc: "Certificamos la limpieza final del fluido bajo la norma ISO 4406/99 y entregamos el equipo 100% operativo.",
-        },
+          desc: "Certificamos la limpieza final del fluido bajo la norma ISO 4406/99 y entregamos el equipo 100% operativo."
+        }
       ],
     },
     testimonials: {
@@ -350,34 +401,62 @@ export const translations: Record<"es" | "en", Translations> = {
       missionTitle: "Our Commitment",
       missionHeading: "Real and reliable solutions",
       missionDesc: "To provide reliable maintenance and repair services, utilizing advanced instrumentation like laser particle counters and in-line flow meters to certify the performance of each component.",
+      certifications: [
+        { name: "ISO 4406/99 Standard", issuer: "Fluid Cleanliness Certification" },
+        { name: "ISO 8434-1 / SAE J514", issuer: "Piping Assembly Systems" }
+      ]
     },
     gallery: {
       label: "OUR PROJECTS",
       slides: [
         {
           title: "Repair & Maintenance",
-          desc: "Intervention and restoration of damaged oleohydraulic components.",
+          desc: "Intervention and restoration of damaged oleohydraulic components."
         },
         {
           title: "Oleohydraulic Assembly",
-          desc: "Installation of rigid fluid piping lines in carbon and stainless steel.",
+          desc: "Assembly of rigid piping lines in carbon and stainless steel."
         },
         {
-          title: "Equipment Manufacturing",
-          desc: "Construction of hydraulic power units (HPU) and microfiltration systems.",
+          title: "Equipment Construction",
+          desc: "Manufacturing of custom hydraulic power units and systems."
         },
         {
-          title: "Fluid Analysis",
-          desc: "Certified laser particle counting under ISO 4406/99 standard.",
+          title: "Analysis & Laser Counting",
+          desc: "Fluid analysis with laser particle counters."
         },
         {
           title: "Flushing Services",
-          desc: "Internal line cleaning with turbulent flow.",
+          desc: "Internal conduit cleaning with turbulent flow."
         },
         {
-          title: "Components & Spare Parts",
-          desc: "Import of specialized components and sale of replacement parts.",
+          title: "Imports & Spare Parts",
+          desc: "Sale of multi-brand hydraulic components and spare parts."
         },
+        {
+          title: "Hydraulic Diagnosis",
+          desc: "On-site technical evaluation of parameters and fluid pressure."
+        },
+        {
+          title: "Test Bench Services",
+          desc: "Performance certification of cylinders and hydraulic pumps."
+        },
+        {
+          title: "High Pressure Hoses",
+          desc: "Assembly, crimping, and testing of hydraulic connections."
+        },
+        {
+          title: "On-Site Services",
+          desc: "Direct on-site technical assistance, diagnosis, and hydraulic maintenance."
+        },
+        {
+          title: "Workshop Infrastructure",
+          desc: "Equipped workshop for disassembly and repair of large components."
+        },
+        {
+          title: "Valves & Distribution",
+          desc: "Expert maintenance and configuration of industrial valve banks."
+        }
       ],
     },
     services: {
@@ -411,6 +490,7 @@ export const translations: Record<"es" | "en", Translations> = {
       joinTitle: "Join our team",
       joinDesc: "We look for hydraulic technicians and assembly mechanics to join our team in Antofagasta.",
       openPositions: "Apply Now",
+      roles: ["Founder & Operations Manager", "Role or Position", "Role or Position"]
     },
     cta: {
       label: "OLEOHYDRAULIC SOLUTIONS",
@@ -459,11 +539,30 @@ export const translations: Record<"es" | "en", Translations> = {
       privacy: "Privacy Policy",
       terms: "Terms of Service",
       backToTop: "[ Back to Top ↑ ]",
+      shortDescription: "Regional company specialized in hydraulic services, maintenance, assembly, and custom equipment manufacturing."
     },
     seo: {
       title: "Oleomac E.I.R.L. | Oleohydraulic Services, Assembly & Repairs in Antofagasta",
       description: "Leading company in the oleohydraulic market of Antofagasta. Component repairs, piping assembly, microfiltration, flushing, and HPU manufacturing.",
       keywords: "oleohydraulics Antofagasta, hydraulic component repairs, oleohydraulic assembly, hydraulic piping, fluid microfiltration, hydraulic flushing, hydraulic power units, spare parts Chile",
+      faq: [
+        {
+          question: "What hydraulic services do you offer?",
+          answer: "We offer fluid analysis with laser particle counters, volumetric performance analysis of pumps and motors, microfiltration, flushing cleaning, rigid piping assembly in carbon/stainless steel, and repair of damaged components."
+        },
+        {
+          question: "What type of equipment do you manufacture or build?",
+          answer: "We manufacture hydraulic power units, microfiltration systems, component test benches, transfer units, and auxiliary power units (APUs), customized to client requirements."
+        },
+        {
+          question: "Where are you located and what are your hours?",
+          answer: "We are located at Avenida Radomiro Tomic 7793, Antofagasta. We are open Monday to Friday from 08:00 to 17:00."
+        },
+        {
+          question: "Do you sell spare parts or hydraulic components?",
+          answer: "Yes, we import hydraulic components and sell specialized spare parts for mobile and industrial machinery."
+        }
+      ]
     },
     whatsappWidget: {
       title: "WhatsApp Oleomac",
@@ -472,6 +571,7 @@ export const translations: Record<"es" | "en", Translations> = {
       chatTooltip: "Chat with us",
       ariaOpen: "Open WhatsApp chat",
       ariaClose: "Close chat",
+      department: "Quotes & Services"
     },
     clientLogos: {
       label: "Companies that trust us",
@@ -483,20 +583,20 @@ export const translations: Record<"es" | "en", Translations> = {
       steps: [
         {
           title: "Reception & Diagnosis",
-          desc: "We evaluate component wear or fluid contamination in the field using state-of-the-art instruments.",
+          desc: "We evaluate component wear or fluid contamination in the field using state-of-the-art instruments."
         },
         {
           title: "Technical Proposal",
-          desc: "We design the optimal repair, assembly, or manufacturing solution with clear budgets and timelines.",
+          desc: "We design the optimal repair, assembly, or manufacturing solution with clear budgets and timelines."
         },
         {
           title: "Execution & Filtration",
-          desc: "We carry out the mechanical work or assembly and apply flushing/microfiltration to ensure system purity.",
+          desc: "We carry out the mechanical work or assembly and apply flushing/microfiltration to ensure system purity."
         },
         {
           title: "Certification & Delivery",
-          desc: "We certify final fluid cleanliness under ISO 4406/99 standard and deliver the fully operational equipment.",
-        },
+          desc: "We certify final fluid cleanliness under ISO 4406/99 standard and deliver the fully operational equipment."
+        }
       ],
     },
     testimonials: {

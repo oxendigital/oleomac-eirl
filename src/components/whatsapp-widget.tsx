@@ -76,7 +76,7 @@ export function WhatsAppWidget({ locale = 'es' }: WhatsAppWidgetProps) {
   const t = translations[lang].whatsappWidget
 
   // Build contacts: use whatsappContacts if defined, otherwise fall back to single contact
-  const contacts: WhatsAppContact[] =
+  const rawContacts =
     businessInfo.whatsappContacts && businessInfo.whatsappContacts.length > 0
       ? businessInfo.whatsappContacts
       : [
@@ -86,7 +86,12 @@ export function WhatsAppWidget({ locale = 'es' }: WhatsAppWidgetProps) {
             phone: businessInfo.contact.whatsapp.replace(/[^\d]/g, ''),
             message: businessInfo.contact.whatsappMessage,
           },
-        ]
+        ];
+
+  const contacts: WhatsAppContact[] = rawContacts.map((contact) => ({
+    ...contact,
+    department: t.department || contact.department,
+  }));
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
